@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table id = "test">
+    <thead>
+    <tr><td>列1</td><td>列2</td><td>列3</td><td>列4</td></tr>
+    </thead>
+    <tbody>
+    <tr><td>1</td><td>1</td><td>2</td><td>3</td></tr>
+    <tr><td>2</td><td>4</td><td>5</td><td>6</td></tr>
+    <tr><td>3</td><td>7</td><td>8</td><td>9</td></tr>
+    <tr><td>4</td><td>1</td><td>2</td><td>3</td></tr>
+    </tbody>
+</table>
+<input type="button" id="btn" value="清空">
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script>
+    $(function(){
+        $("#btn").click(function() {
+            $("#test tbody").html("");
+        });
+    });
+</script>
+</body>
+</html>

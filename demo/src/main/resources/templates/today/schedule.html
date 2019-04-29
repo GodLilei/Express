@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+</style>
+<blockquote class="layui-elem-quote" style="margin-top: 20px">
+    <h2>计划制定</h2>
+</blockquote>
+<body class="mybody">
+<div class="layui-collapse" lay-filter="plan">
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">工作任务</h2>
+        <div class="layui-colla-content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">预定时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" lay-verify="required" name="time" id="time"
+                                   placeholder="yyyy-MM-dd">
+                            <input type="hidden" name="type" value="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">任务标题</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="title" id="title" placeholder="标题">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务描述</label>
+                    <div class="layui-input-block">
+                            <textarea placeholder="请输入任务描述内容" class="layui-textarea" name="content"
+                                      id="discription"></textarea>
+                    </div>
+                </div>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-danger" id="btn" lay-submit lay-filter="formDemo">确认</button>
+                    <input type="reset" class="layui-btn" id="reset">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">日常生活</h2>
+        <div class="layui-colla-content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">预定时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" lay-verify="required" name="time" id="time1"
+                                   placeholder="yyyy-MM-dd">
+                            <input type="hidden" name="type" value="2">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">任务标题</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="title" id="title1" placeholder="标题">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务描述</label>
+                    <div class="layui-input-block">
+                            <textarea placeholder="请输入任务描述内容" class="layui-textarea" name="content"
+                                      id="discription1"></textarea>
+                    </div>
+                </div>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-danger" id="btn1" lay-submit lay-filter="formDemo1">确认</button>
+                    <input type="reset" class="layui-btn" id="reset1">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">其他任务</h2>
+        <div class="layui-colla-content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">预定时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" lay-verify="required" name="time" id="time2"
+                                   placeholder="yyyy-MM-dd">
+                            <input type="hidden" name="type" value="3">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">任务标题</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="title" id="title2" placeholder="标题">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务描述</label>
+                    <div class="layui-input-block">
+                            <textarea placeholder="请输入任务描述内容" class="layui-textarea" name="content"
+                                      id="discription2"></textarea>
+                    </div>
+                </div>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-danger" id="btn2" lay-submit lay-filter="formDemo2">确认</button>
+                    <input type="reset" class="layui-btn" id="reset2">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">每日必做</h2>
+        <div class="layui-colla-content">
+            <p style="margin-bottom: 15px">每日必做只需要选择你想要添加的，然后直接保存即可，时间选择默认为当天，如果需要选择时间，请选择上方
+                的添加任务！<span style="color: red">特别注意：一次最多添加十条哦，否则表格缓存会满的哦。</span></p>
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" id="chooseLabel">搜索内容</label>
+                        <div class="layui-input-inline">
+                            <label for="choose"></label>
+                            <select name="choose" id="choose" lay-filter="choose">
+                                <option value="">请选择列</option>
+                                <option value="title">标题</option>
+                                <option value="content">内容</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <label for="dayTask"></label>
+                            <select id="dayTask" name="dayTask" lay-search="" lay-filter="dayTask">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <button class="layui-btn layui-btn-normal" lay-submit id="chooseBtn"
+                                    name="chooseBtn"
+                                    lay-filter="chooseBtn">选择
+                            </button>
+                            <input type="hidden" id="dayTaskType" name="dayTaskType">
+                            <input type="hidden" id="dayTaskTypeMsg" name="dayTaskTypeMsg">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务描述</label>
+                    <div class="layui-input-block">
+                            <textarea placeholder="任务描述" class="layui-textarea" name="dayTaskContent"
+                                      id="dayTaskContent" readonly></textarea>
+                    </div>
+                </div>
+            </form>
+            <table class="layui-table" lay-filter="taskTable" id="taskTable"></table>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container demoTable">
+        <button class="layui-btn layui-btn-sm" lay-event="uploadSelect">上传选中数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteTable">清空列表</button>
+    </div>
+</script>
+<script>
+    layui.use(['element', 'layer','form','laydate','table'], function() {
+        var element = layui.element;
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var $ = layui.jquery;
+        element.on('collapse(plan)', function(data){
+            // layer.msg('展开状态：'+ data.show);
+        });
+        /*
+         * 表单监控
+         */
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                data: data.field,
+                dataType: 'text',
+                type:'post',
+                url:'/scheduleMake',
+                success:function (data) {
+                    layer.msg(data);
+                },
+                error:function () {
+                }
+            });
+            return false;
+        });
+        form.on('submit(formDemo1)', function(data){
+            $.ajax({
+                data: data.field,
+                dataType: 'text',
+                type:'post',
+                url:'/scheduleMake',
+                success:function (data) {
+                    layer.msg(data);
+                },
+                error:function () {
+                }
+            });
+            return false;
+        });
+        form.on('submit(formDemo2)', function(data){
+            $.ajax({
+                data: data.field,
+                dataType: 'text',
+                type:'post',
+                url:'/scheduleMake',
+                success:function (data) {
+                    layer.msg(data);
+                },
+                error:function () {
+                }
+            });
+            return false;
+        });
+        /**
+         * 表格渲染
+         */
+        var tableObj = table.render({
+            elem: '#taskTable',
+            data:[],
+            toolbar: '#toolbarDemo',
+            cols:[
+                [
+                    {type:'checkbox', fixed: 'left'}
+                    ,{field:'title',title:'标题', width:240}
+                    ,{field:'content',title:'内容', width:865}
+                    // ,{field:'type',title:'类型', width:150}
+                    ,{field:'typeMsg',title:'类型', width:150}
+                    ,{fixed:'right',align:'center', toolbar: '#barDemo',title:'操作',width:100}
+                ]
+            ]
+        });
+
+        /**
+         * 右侧操作工具
+         */
+        table.on('tool(taskTable)', function(obj){
+            if(obj.event === 'del'){
+                obj.del();
+            }
+        });
+
+        /**
+         * 头部操作工具
+         */
+        table.on('toolbar(taskTable)', function(obj){
+            var checkStatus = table.checkStatus('taskTable');
+            switch(obj.event){
+                case 'uploadSelect':
+                    var test = {};
+                    var selectData = table.checkStatus('taskTable');
+                    var data = selectData.data;//表格中被选择的数据[{},{},{}........]
+                    console.log(data);
+                    test["dayTaskData"] = data;
+                    var flag = JSON.stringify(test);
+                    console.log('the value:'+flag);
+                    $.ajax({
+                        data: flag,
+                        dataType: 'text',
+                        contentType:'application/json;charset=UTF-8',
+                        type:'post',
+                        url:'/uploadDayTaskSelect',
+                        success: function (data) {
+                            layer.msg(data);
+                        },
+                        error: function () {
+                        }
+                    });
+                    break;
+                case 'deleteTable':
+                    var valueTable = [];
+                    table.reload('taskTable',{
+                        data:valueTable
+                    });
+                    break;
+            }
+        });
+
+        form.on('submit(chooseBtn)',function (data) {
+
+            var valueTable = table.cache['taskTable'];
+                valueTable.push({
+                    title:data.field.dayTask,
+                    content:data.field.dayTaskContent,
+                    type:data.field.dayTaskType,
+                    typeMsg:data.field.dayTaskTypeMsg
+                });
+            table.reload('taskTable',{
+               data:valueTable
+            });
+            return false;
+        });
+
+
+
+        /**
+         * 下拉选择框
+         */
+        var valueDayTask = '';
+
+        form.on('select(choose)',function () {
+            var value = $('#choose').val();
+            var data = new Choose(value);
+            $.ajax({
+                data:data,
+                dataType: 'text',
+                timeout:3000,
+                type:'post',
+                url:'/chooseTask',
+                success: function (data) {
+                    valueDayTask = JSON.parse(data);
+                    var ch = $('#choose').val();
+                    if (ch === 'title'){
+                        document.getElementById("dayTask").options.length=0;
+                        $('#dayTask').append("<option></option>");
+                        for (var i = 0; i < valueDayTask.data.length; i++) {
+                            $('#dayTask').append("<option>" + valueDayTask.data[i].title + "</option>");
+                            form.render();
+                        }
+                    }else{
+                        layer.tips('暂不支持通过内容添加', '#chooseLabel', {
+                            tips:1,
+                            tipsMore:false
+                        });
+                        // document.getElementById("dayTask").options.length=0;
+                        // $('#dayTask').append("<option></option>");
+                        // for (i = 0; i < valueDayTask.data.length; i++) {
+                        //     $('#dayTask').append("<option>" + valueDayTask.data[i].content + "</option>");
+                        //     form.render();
+                        // }
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        });
+        form.on('select(dayTask)',function () {
+           var dayTaskTitle = $('#dayTask').val();
+           for (var tmp = 0; tmp < valueDayTask.data.length; tmp++) {
+               if (valueDayTask.data[tmp].title === dayTaskTitle){
+                   $('#dayTaskContent').val(valueDayTask.data[tmp].content);
+                   $('#dayTaskType').val(valueDayTask.data[tmp].type);
+                   $('#dayTaskTypeMsg').val(valueDayTask.data[tmp].typeMsg);
+                   break;
+               }
+           }
+        });
+
+        /*
+         * 日期渲染
+         */
+        laydate.render({
+            elem: '#time'
+            ,min: 0
+            ,max: 20
+        });
+        laydate.render({
+            elem: '#time1'
+            ,min: 0
+            ,max: 20
+        });
+        laydate.render({
+            elem: '#time2'
+            ,min: 0
+            ,max: 20
+        });
+
+        //弹框提示
+        $('#time,#time1,#time2').click(function () {
+            var that = this;
+            /**
+             * tips(content,follow,options)
+             */
+            layer.tips('时间选择从今天开始，最多20天', that, {
+                tips:1,
+                tipsMore:false
+            }); //在元素的事件回调体中，follow直接赋予this即可
+        });
+
+        /**
+         * 自定义函数,传类
+         */
+        function Choose(title) {
+            this.title = title;
+        }
+        function taskTableFunc(title,content,type) {
+            this.title = title;
+            this.content = content;
+            this.type = type;
+        }
+    });
+</script>
+</html>

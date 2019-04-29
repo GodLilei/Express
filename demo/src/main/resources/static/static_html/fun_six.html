@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+    .myA{
+        font-size: 0.8em;
+        color: gainsboro;
+    }
+</style>
+<body class="mybody">
+<div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>子系统基本操作
+            <a href="https://www.cnblogs.com/c9999/p/6636415.html" target="_blank" class="myA">http请求介绍</a></legend>
+    </fieldset>
+</div>
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">运单号码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="waybill_no" id="waybill" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作人代码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="op_user_code" value="00003520" id="empCode" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作人姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="op_user_name" value="张三" id="empName" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">揽收重量</label>
+            <div class="layui-input-inline">
+                <input type="text" name="input_weight" value="10" id="takingWeight" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>揽收信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">发件客户</label>
+            <div class="layui-input-inline">
+                <input type="text" name="emp_code" value="K21002107" id="customer" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">始发网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="source_org_code" value="210045" id="sourceOrgCode" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">目的网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="des_org_code" value="210077" id="desOrgCode" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="taking_org_code" id="takingOrgCode" autocomplete="off" value="210077"
+                       class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>建包信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">包签号码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="pkg_no" value="WB1230396056" id="pkgNo" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="build_org_code" value="210901" id="bulidOrgCode" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">ORGTYPE</label>
+            <div class="layui-input-inline">
+                <select name="build_org_type" id="buildType" lay-filter="buildType">
+                    <option value="">请选择</option>
+                    <option value="BRANCH">BRANCH</option>
+                    <option value="TRANSFER_CENTER" selected>TRANSFER_CENTER</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>下车信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">车签号码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="car_no" value="CQ12344321" id="carNo" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">下车重量</label>
+            <div class="layui-input-inline">
+                <input type="text" name="out_weight" value="10" id="outWeight" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="out_org_code" value="210901" id="outOrgCode" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">ORGTYPE</label>
+            <div class="layui-input-inline">
+                <select name="out_org_type" id="outType" lay-filter="outType">
+                    <option value="">请选择</option>
+                    <option value="BRANCH">BRANCH</option>
+                    <option value="TRANSFER_CENTER" selected>TRANSFER_CENTER</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>派件信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">派件人代码</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" name="hondonEmpCode" value="00003530" id="hondonEmpCode" autocomplete="off"-->
+                       <!--lay-verify="required"-->
+                       <!--class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">派件人姓名</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" name="handonEmpName" value="李四" id="handonEmpName" autocomplete="off"-->
+                       <!--lay-verify="required"-->
+                       <!--class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-inline">
+            <label class="layui-form-label">派件人电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="signature_tel" value="13598755489" id="hondonEmpPho" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">派件网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="handon_org_code" value="210077" id="handonOrgCode" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>签收信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">收派人代码</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" name="signatureEmpCode" value="00003530" id="signatureEmpCode" autocomplete="off"-->
+                       <!--lay-verify="required"-->
+                       <!--class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">派件人姓名</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" name="signatureEmpName" value="李四" id="signatureEmpName" autocomplete="off"-->
+                       <!--lay-verify="required"-->
+                       <!--class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-inline">
+            <label class="layui-form-label">签收人姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="signature_name" value="Lucy" id="signatureName" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">签收网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="signature_org_code" value="210077" id="signatureOrgCode" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-danger" id="taking" lay-submit lay-filter="taking">揽收</button>
+            <button class="layui-btn layui-btn-danger" id="build" lay-submit lay-filter="build">建包</button>
+            <button class="layui-btn layui-btn-danger" id="out" lay-submit lay-filter="out">下车</button>
+            <button class="layui-btn layui-btn-danger" id="out_return" lay-submit lay-filter="out_return">退回</button>
+            <button class="layui-btn layui-btn-danger" id="handon" lay-submit lay-filter="handon">派件</button>
+            <button class="layui-btn layui-btn-danger" id="signature" lay-submit lay-filter="signature">签收</button>
+            <button class="layui-btn layui-btn-danger" id="waybillGet" lay-submit lay-filter="waybillGet">一键造单</button>
+            <input type="reset" class="layui-btn" id="reset2">
+        </div>
+    </div>
+</form>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['table','layer','form'], function() {
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        form.on('submit(taking)',function (data) {
+            var taking = JSON.stringify(data.field);
+            $.ajax({
+                url:'/taking',
+                data:taking,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var takingRes = JSON.parse(data);
+                    if (takingRes.code === '0') {
+                        layer.msg(takingRes.message);
+                    }else {
+                        layer.alert(takingRes.message);
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(build)',function (data) {
+            var bulid = JSON.stringify(data.field);
+            $.ajax({
+                url:'/build',
+                data:bulid,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var buildRes = JSON.parse(data);
+                    if (buildRes.code === '0') {
+                        layer.msg(buildRes.message);
+                    }else {
+                        layer.alert(buildRes.message);
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(out)',function (data) {
+            var out = JSON.stringify(data.field);
+            $.ajax({
+                url:'/out',
+                data:out,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var outRes = JSON.parse(data);
+                    if (outRes.code === '0') {
+                        layer.msg(outRes.message);
+                    }else {
+                        layer.alert(outRes.message);
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(out_return)',function (data) {
+            var out_return = JSON.stringify(data.field);
+            $.ajax({
+                url:'/outReturn',
+                data:out_return,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var outReturnRes = JSON.parse(data);
+                    if (outReturnRes.code === '0') {
+                        layer.msg(outReturnRes.message);
+                    }else {
+                        layer.alert(outReturnRes.message);
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(handon)',function (data) {
+            var handon = JSON.stringify(data.field);
+            $.ajax({
+                url:'/handon',
+                data:handon,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var handonRes = JSON.parse(data);
+                    if (handonRes.code === '0') {
+                        layer.msg(handonRes.message);
+                    }else {
+                        layer.alert(handonRes.message);
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(signature)',function (data) {
+            var signature = JSON.stringify(data.field);
+            $.ajax({
+                url:'/signature',
+                data:signature,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var signatureRes = JSON.parse(data);
+                    if (signatureRes.code === '0') {
+                        layer.msg(signatureRes.message);
+                    }else {
+                        layer.alert(signatureRes.message);
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(waybillGet)',function (data) {
+            var waybillGet = JSON.stringify(data.field);
+            $.ajax({
+                url:'/waybillGet',
+                data:waybillGet,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (waybill) {
+                    layer.msg('单号生成成功，客户：' + $('#customer').val() + '网点：' + $('#sourceOrgCode').val());
+                    $('#waybill').val(JSON.parse(waybill).data[0].wbn)
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+    .myA{
+        font-size: 0.8em;
+        color: gainsboro;
+    }
+</style>
+<body class="mybody">
+<div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>简单接口测试小工具
+            <a href="https://www.cnblogs.com/c9999/p/6636415.html" target="_blank" class="myA">http请求介绍</a></legend>
+    </fieldset>
+</div>
+<div>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">接口地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="interAddress" lay-verify="required" id="interAddress" autocomplete="off"
+                       placeholder=""
+                       class="layui-input" required>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">接口参数</label>
+            <div class="layui-input-block">
+                            <textarea placeholder="" class="layui-textarea" name="interData"
+                                      id="interData"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-danger" id="btPOST" lay-submit lay-filter="btPOST">POST</button>
+                    <button class="layui-btn layui-btn-danger" id="btGET" lay-submit lay-filter="btGET">GET</button>
+                    <input type="reset" class="layui-btn" id="reset2">
+                    <button class="layui-btn layui-btn-danger" id="btSave" lay-submit lay-filter="btSave">保存接口和参数</button>
+                    <button class="layui-btn layui-btn-danger" id="btLoad" lay-submit lay-filter="btLoad">读取接口</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-disabled" id="toTable" lay-submit disabled
+                            lay-filter="toTable">转换表格
+                    </button>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label for="paramStyle"></label>
+                <select id="paramStyle" lay-filter="paramStyle">
+                    <option value="0">-----请选择-----</option>
+                    <option value="1">data:[]格式</option>
+                    <option value="2">data:{}格式</option>
+                    <option value="3">[{}]格式</option>
+                </select></div>
+        </div>
+    </form>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>读取接口数据</legend>
+        </fieldset>
+        <form action="" class="layui-form">
+            <label class="layui-form-label">接口查找</label>
+            <div class="layui-input-block">
+                <select id="interLoad" name="interLoad" lay-filter="interLoad" lay-search="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </form>
+        <table id="interLoadTable" class="layui-table" lay-filter="interLoadTable">
+            <thead><tr id="loadHead"></tr></thead>
+            <tbody id="loadBody"></tbody>
+        </table>
+    </div>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>返回数据</legend>
+        </fieldset>
+    </div>
+    <div>
+        <label for="returnValue"></label>
+        <textarea id="returnValue" class="layui-textarea" readonly></textarea>
+    </div>
+    <table class="layui-table" lay-filter="interFaceTable" id="interFaceTable">
+        <thead><tr id="tableHead"></tr></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['table','layer','form'], function() {
+            var form = layui.form;
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.jquery;
+            var loadInterData = "";
+
+            $('#interAddress').val("http://jingangtest.yto56.com.cn/services/priceI/bpricewithweightrulebyname");
+            $('#interData').val("{\n" +
+                "\t\"fromProvinceName\":\"湖南省\",\n" +
+                "\t\"fromCityName\":\"长沙市\",\n" +
+                "\t\"toProvinceName\":\"上海\",\n" +
+                "\t\"toCityName\":\"上海市\",\n" +
+                "\t\"effectiveTypeCode\":\"\",\n" +
+                "\t\"priceTypeCode\":\"\",\n" +
+                "\t\"weight\":\"7\",\n" +
+                "\t\"auth\":\"eIjvyuhFHrrm9jkLmxwqYw==\"\n" +
+                "}");
+
+        $('#returnValue').dblclick(function () {
+            if ($('#returnValue').val() === ''){
+            } else {
+                layer.alert($('#returnValue').val(),{
+                    area: ['1380px', '700px']
+                });
+            }
+        });
+
+        form.on('select(paramStyle)',function () {
+            var paramStyleFlag = $('#paramStyle').val();
+            console.log(paramStyleFlag);
+            switch (paramStyleFlag){
+                case '0':
+                    $('#toTable').addClass('layui-btn-disabled');
+                    document.all.toTable.disabled = true;
+                    break;
+                case '1':
+                    $('#toTable').removeClass('layui-btn-disabled');
+                    document.all.toTable.disabled = false;
+                    break;
+                case '2':
+                    $('#toTable').removeClass('layui-btn-disabled');
+                    document.all.toTable.disabled = false;
+                    break;
+            }
+        });
+
+        form.on('submit(btSave)',function (data) {
+
+            layer.prompt({title: '输入接口名', formType: 2}, function(title, index){
+                layer.close(index);
+                layer.prompt({title: '输入备注', formType: 2}, function(text, index){
+                    layer.close(index);
+                    var interJSON = {
+                        "interTitle":title,
+                        "interContent":text
+                    };
+                    var saveInterFace = JSON.stringify($.extend(data.field, interJSON));
+                    $.ajax({
+                        url:'/interSave',
+                        data:saveInterFace,
+                        dataType: 'text',
+                        contentType:'application/json;charset=UTF-8',
+                        type:'post',
+                        success:function (data) {
+                            layer.msg(data);
+                        },
+                        error:function (data) {
+                        }
+                    });
+                });
+            });
+            return false;
+        });
+
+        form.on('submit(btLoad)',function (data) {
+            loadInterData = '';
+            $.ajax({
+                url:'/interLoad',
+                dataType: 'text',
+                type:'post',
+                success:function (data) {
+                    var loadValue = JSON.parse(data);
+                    loadInterData = loadValue;
+                    document.getElementById("interLoad").options.length=0;
+                    $('#interLoad').append("<option>---请选择---</option>");
+                    for (var i = 0; i < loadValue.data.length; i++) {
+                        $('#interLoad').append("<option value='" + i + "'>" + loadValue.data[i].interTitle + " | " +
+                            loadValue.data[i].interContent +
+                            " | " + loadValue.data[i].interAddress + "</option>");
+                        form.render();
+                    }
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+
+        form.on('select(interLoad)',function () {
+           var selectTemp = document.getElementById("interLoad").value;
+           $('#interAddress').val(loadInterData.data[selectTemp].interAddress);
+           $('#interData').val(loadInterData.data[selectTemp].interData);
+        });
+
+        form.on('submit(toTable)',function (data) {
+            var param_Flg = '';
+            layer.prompt({title: '输入参数', formType: 2}, function(param, index){
+                layer.close(index);
+                param_Flg = param;
+
+                document.getElementById("tableHead").innerHTML='';
+                document.getElementById("tableBody").innerHTML='';
+
+                var value = JSON.parse($('#returnValue').val());
+                var tableKey = [],tableValue = [],flag = 0;
+
+                switch ($('#paramStyle').val()){
+                    /**
+                     * 返回值格式{"data":[{}],"success":"1","msg":""}
+                     */
+                    case '1':
+                        tableKey = [];flag = 0;
+                        /**
+                         * value : {"A":"a","data":[{"b1":"b11","b2":"b22",.....}]}
+                         * 数组保存key和value
+                         */
+                        for (param_temp1 in value){
+                            if (param_temp1 === param_Flg){
+                                for (tablekey in value[param_temp1][0]){//得到表头的值，{......}
+                                    tableKey[flag++] = tablekey;
+                                }
+                                for (var j = 0; j < tableKey.length; j++) {
+                                    $('#tableHead').append("<th>" + tableKey[j] + "</th>");
+                                }
+                                for (var tabletemp=0;tabletemp < value[param_temp1].length;tabletemp++){
+                                    tableValue = [];flag = 0;
+                                    for (tablevalue in value[param_temp1][tabletemp]){//得到value里面的data的值，{......}
+                                        tableValue[flag++] = value[param_temp1][tabletemp][tablevalue];
+                                    }
+                                    $('#tableBody').append("<tr>");
+                                    for (var k = 0; k < tableKey.length; k++) {
+                                        $('#tableBody').append("<th>" + tableValue[k] + "</th>");
+                                    }
+                                    $('#tableBody').append("</tr>");
+                                }
+                            }
+                        }
+                        break;
+                    case '2':
+                        tableKey = [];flag = 0;tableValue = [];
+                        for (param_temp2 in value){
+                            if (param_temp2 === param_Flg){
+                                for (tablekey in value[param_temp2]){//得到表头的值，{......}
+                                    tableKey[flag++] = tablekey;
+                                }
+                                for (j = 0; j < tableKey.length; j++) {
+                                    $('#tableHead').append("<th>" + tableKey[j] + "</th>");
+                                }
+                                tableValue = [];flag = 0;
+                                for (tablevalue in value[param_temp2]){//得到value里面的data的值，{......}
+                                    tableValue[flag++] = value[param_temp2][tablevalue];
+                                }
+                                $('#tableBody').append("<tr>");
+                                for (k = 0; k < tableKey.length; k++) {
+                                    $('#tableBody').append("<th>" + tableValue[k] + "</th>");
+                                }
+                                $('#tableBody').append("</tr>");
+                            }
+                        }
+                        break;
+                    case '3':
+                        /**
+                         * 返回值格式{
+                     * "A":[{"a1":"a11","a2":"a22",......},{},{}......],
+                     * "B":[{"b1":"b11","b2":"b22",......},{},{}......]
+                     * }
+                         */
+                        layer.msg('还在开发呢，别急，等到接口的时候有时间做了它QWQ');
+                        break;
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(btPOST)',function (data) {
+            var flag = JSON.stringify(data.field);
+            $.ajax({
+                url:'/interPost   ',
+                data:flag,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    console.log(data);
+                    // var value = JSON.parse(data);
+                    $('#returnValue').val(data);
+                },
+                error:function (data) {
+                    layer.msg('请求失败');
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(btGET)',function (data) {
+            var flag = JSON.stringify(data.field);
+            $.ajax({
+                url:'/interGet',
+                data:flag,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    var value = JSON.parse(data);
+                    $('#returnValue').val(data);
+                },
+                error:function (data) {
+                    layer.msg('请求失败');
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

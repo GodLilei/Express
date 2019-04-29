@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>インジケーターの設定</legend>
+</fieldset>
+<body class="mybody">
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">属性の選択</label>
+            <div class="layui-input-inline">
+                <select name="quiz1" id="quiz1" lay-filter="quiz1">
+                    <option value="">请选择列</option>
+                    <option value="uname">名</option>
+                    <option value="temp">アクセス 許可</option>
+                    <option value="phone">電話</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select id="mySelect" lay-search="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">場所の選択</label>
+            <div class="layui-input-inline">
+                <select name="quiz2" id="quiz2" lay-filter="quiz2">
+                    <option value="">请选择列</option>
+                    <option value="all">总公司</option>
+                    <option value="center">中心</option>
+                    <option value="point">网点</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select id="place" lay-search="" name="place" lay-filter="place">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">電話</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="phone" id="phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">サイクル</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="days" id="days" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" id="submitbtn" style="width: 100px;">見つける</button>
+                <input type="reset" class="layui-btn layui-btn-primary" style="width: 100px" value="リセット"/>
+            </div>
+        </div>
+    </div>
+</form>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>インジケータークエリ</legend>
+</fieldset>
+<table class="layui-table" lay-filter="myTable" id="myTable">
+</table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addNew">増加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delSelect">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="exportExcel">导出</button>
+        <button class="layui-btn layui-btn-sm" lay-event="importExcel">导入</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="daysTpl">
+    {{#  if(d.days === '3'){  }}
+    <span style="color: #F581B1;">{{ d.days }}</span>
+    {{#  } else {  }}
+    {{ d.days  }}
+    {{#  }  }}
+</script>
+<script type="text/html" id="weightTpl">
+    {{#  if(d.max_weight === '1'){  }}
+    <span style="color: #F581B1;">{{ d.max_weight }}</span>
+    {{#  } else {  }}
+    {{ d.max_weight  }}
+    {{#  }  }}
+</script>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+        layui.use(['table','layer','form'], function() {
+            var form = layui.form;
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.jquery;
+
+        form.on('select(quiz1)',function () {
+            var v = document.getElementById('quiz1').value;
+            var data = new f(v);
+            $.ajax({
+                data: data,
+                dataType: 'text',
+                // timeout:3000,
+                // async:false,
+                type:'post',
+                url:'/selectUname',
+                success:function (data) {
+                    var json = JSON.parse(data);
+                    var v = document.getElementById('quiz1').value;
+                    if (v === 'uname'){
+                        document.getElementById("mySelect").options.length=0;
+                        $('#mySelect').append("<option></option>");
+                        for (var i = 0; i < json.length; i++) {
+                            $('#mySelect').append("<option>" + json[i].uname + "</option>");
+                            form.render();
+                        }
+                    }
+                    if (v === 'temp'){
+                        document.getElementById("mySelect").options.length=0;
+                        $('#mySelect').append("<option></option>");
+                        for (var j = 0; j < json.length; j++) {
+                            $('#mySelect').append("<option>" + json[j].temp + "</option>");
+                            form.render();
+                        }
+                    }
+                    if (v === 'phone'){
+                        document.getElementById("mySelect").options.length=0;
+                        $('#mySelect').append("<option></option>");
+                        for (var k = 0; k < json.length; k++) {
+                            $('#mySelect').append("<option>" + json[k].phone + "</option>");
+                            form.render();
+                        }
+                    }
+                },
+                error:function () {
+                    layer.msg('データベースの読み込みに失敗しました！');
+                }
+            });
+        });
+
+        form.on('select(quiz2)',function () {
+            var v = document.getElementById('quiz2').value;
+            var data = new f(v);
+            $.ajax({
+                data: data,
+                dataType: 'text',
+                // timeout:3000,
+                // async:false,
+                type:'post',
+                url:'/selectPlace',
+                success:function (data) {
+                    var json = JSON.parse(data);
+                    document.getElementById("place").options.length=0;
+                    $('#place').append("<option></option>");
+                    for (var i = 0; i < json.length; i++) {
+                        $('#place').append("<option value='" + json[i].place_code + "'>" + json[i].place_name + "</option>");
+                        form.render();
+                    }
+                },
+                error:function () {
+                    layer.msg('データベースの読み込みに失敗しました！');
+                }
+            });
+        });
+
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                data:data.field
+                ,type:'post'
+                ,dataType:'text'
+                ,url:'/selectBillIndex'
+                ,success: function (data) {
+                    var json = JSON.parse(data);
+                    // console.log(json);
+                    table.render({
+                        elem:'#myTable'
+                        ,data:json
+                        ,toolbar: '#toolbarDemo'
+                        ,cols:[
+                            [
+                                {type: 'checkbox', fixed: 'left'}
+                                ,{field:'type_code',  sort: true,fixed: 'left',title:'费用代码'}
+                                ,{field:'type_name',title:'费用名称'}
+                                ,{field:'place_code',title:'地点代码'}
+                                ,{field:'place_name',title:'地点名称'}
+                                ,{field:'max_money',title:'金额指标'}
+                                ,{field:'max_qty',title:'数量指标'}
+                                ,{field:'max_weight',title:'重量指标', templet: '#weightTpl'}
+                                ,{field:'days',title:'统计周期', templet: '#daysTpl', sort: true}
+                                ,{field:'phone',title:'预警电话'}
+                                ,{field:'create_time',title:'创建时间', sort: true}
+                                ,{fixed: 'right',align:'center', toolbar: '#barDemo',title:'操作'}
+                            ]
+                        ]
+                        // ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem）
+                        //     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                        //     , curr: 1 //设定初始在第 1 页
+                        //     , groups: 1 //只显示 1 个连续页码
+                        //     , first: false //不显示首页
+                        //     , last: false //不显示尾页
+                        // }
+                        ,page:true
+                    });
+                }
+                ,error: function () {
+                    layer.msg('table load error');
+                }
+            });
+            return false;
+        });
+
+        //头工具栏事件
+        table.on('toolbar(myTable)', function(obj){
+            // console.log(obj.config.id);
+            var checkStatus = table.checkStatus('myTable');
+            // console.log(checkStatus);
+            switch(obj.event){
+                case 'addNew':
+                    layer.open({
+                        type:2
+                        ,title:'新しいメトリック'
+                        ,area: ['700px', '670px']
+                        ,skin: 'demo-class'
+                        ,offset: '10px'
+                        ,maxmin: false
+                        ,anim: 1
+                        ,resize:false
+                    });
+                    break;
+                case 'delSelect':
+                    var data = checkStatus.data;
+                    layer.msg(data.length + 'データが選択されました');
+                    break;
+                case 'exportExcel':
+                    var days = $('#days').val();
+                    // layer.msg(checkStatus.isAll ? 'すべて選択': '完全に選択されていない');
+                    window.location.href ='/excelExport?days=' + days;
+                    break;
+                case 'importExcel':
+                    // layer.msg(checkStatus.isAll ? 'すべて選択': '完全に選択されていない');
+                    layer.open({
+                        type:2
+                        ,title:'excel文件导入'
+                        ,area: ['1000px', '550px']
+                        ,content: '/test_page/test_upload.html'
+                        ,skin: 'demo-class'
+                        ,offset: '10px'
+                        ,maxmin: false
+                        ,anim: 1
+                        ,resize:false
+                    });
+                    // window.location.href ='/excelImport';
+                    break;
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(myTable)', function(obj){
+            var data = obj.data;//data是一个json数据,当前行
+            if(obj.event === 'del'){
+                layer.confirm('このデータを本当に削除しましたか?', function(index){
+                    obj.del();
+                    layer.close(index);
+                    $.ajax({
+                        url:'/delIndex'
+                        ,type:'post'
+                        ,data:data
+                        ,dataType:'text'
+                        ,success:function (data) {
+                            layer.msg(data,{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                        ,error:function () {
+                            layer.msg('削除に失敗！！',{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit'){
+                layer.msg('その後の開発をお待ちください。',{
+                    offset:'100px'
+                });
+            }
+
+        });
+        function f(v) {
+            this.v = v;
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <style>
+        .mybody{
+            width: 98.5%;
+            margin: 10px 10px auto;
+        }
+    </style>
+<body class="mybody">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>装备词典</legend>
+</fieldset>
+<div class="layui-collapse" lay-filter="test">
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">新增武器装备</h2>
+        <div class="layui-colla-content">
+            <div>
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">装备名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="装备名称" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">装备等级</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="等级" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">重量</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="重量" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">价格</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="价格" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">职业</label>
+                            <div class="layui-input-inline">
+                                <select name="quiz1" id="quiz1" lay-filter="quiz1">
+                                    <option value="">职业</option>
+                                    <option value="sword">鬼剑士</option>
+                                    <option value="shooter">神枪手</option>
+                                    <option value="magicians">魔法师</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="quiz2" id="quiz2" lay-filter="quiz2">
+                                    <option value="">转职</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="quiz3" id="quiz3" lay-filter="quiz3">
+                                    <option value="">武器类型</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="quiz4" id="quiz4" lay-filter="quiz4">
+                                    <option value="">品质</option>
+                                    <option value="all">普通</option>
+                                    <option value="center">高级</option>
+                                    <option value="point">稀有</option>
+                                    <option value="all">神器</option>
+                                    <option value="center">传说</option>
+                                    <option value="point">史诗</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">验证手机</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">验证邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">兑换查询</h2>
+        <div class="layui-colla-content">
+            <p>因为不适合。如果希望开发长期的项目或者制作产品类网站，那么就需要实现特定的设计，为了在维护项目中可以方便地按设计师要求快速修改样式，肯定会逐步编写出各种业务组件、工具类，相当于为项目自行开发一套框架。——来自知乎@Kayo</p>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">装备查询</h2>
+        <div class="layui-colla-content">
+            <p>在前端技术快速变革的今天，layui 仍然坚持语义化的组织模式，甚至于模块理念都是采用类AMD组织形式，并非是有意与时代背道而驰。layui
+                认为以jQuery为核心的开发方式还没有到完全消亡的时候，而早期市面上基于jQuery的UI都普通做得差强人意，所以需要有一个新的UI去重新为这一领域注入活力，并采用一些更科学的架构方式。
+                <br><br>
+                因此准确地说，layui 更多是面向那些追求开发简单的前端工程师们，以及所有层次的服务端程序员。</p>
+        </div>
+
+        <h2 class="layui-colla-title">装备对比</h2>
+        <div class="layui-colla-content">
+            <p>man！ 所以这个问题不要再出现了。。。</p>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['element', 'layer','form'], function(){
+        var element = layui.element;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        //监听折叠
+        element.on('collapse(test)', function(data){
+           // layer.msg('展开状态：'+ data.show);
+        });
+
+        form.on('select(quiz1)',function () {
+            var v = document.getElementById('quiz1').value;
+            if (v === 'sword'){
+                document.getElementById("quiz2").options.length=0;
+                document.getElementById("quiz3").options.length=0;
+                $('#quiz2').append("<option></option>" +
+                    "<option value=''>红狗</option>" +
+                    "<option value=''>瞎子</option>" +
+                    "<option value=''>鬼泣</option>" +
+                    "<option value=''>白手</option>");
+                $('#quiz3').append("<option></option>" +
+                    "<option value=''>太刀</option>" +
+                    "<option value=''>短剑</option>" +
+                    "<option value=''>巨剑</option>" +
+                    "<option value=''>钝器</option>" +
+                    "<option value=''>光剑</option>");
+                form.render();
+            } else if (v === 'shooter'){
+                document.getElementById("quiz2").options.length=0;
+                document.getElementById("quiz3").options.length=0;
+                $('#quiz2').append("<option></option>" +
+                    "<option value=''>漫游</option>" +
+                    "<option value=''>大枪</option>" +
+                    "<option value=''>弹药</option>" +
+                    "<option value=''>机械</option>");
+                $('#quiz3').append("<option></option>" +
+                    "<option value=''>左轮</option>" +
+                    "<option value=''>手弩</option>" +
+                    "<option value=''>步枪</option>" +
+                    "<option value=''>手炮</option>" +
+                    "<option value=''>自动手枪</option>");
+                form.render();
+            } else if (v === 'magicians') {
+                document.getElementById("quiz2").options.length=0;
+                document.getElementById("quiz3").options.length=0;
+                $('#quiz2').append("<option></option>" +
+                    "<option value=''>援素</option>" +
+                    "<option value=''>萌道</option>" +
+                    "<option value=''>战法</option>" +
+                    "<option value=''>月虫</option>");
+                $('#quiz3').append("<option></option>" +
+                    "<option value=''>扫把</option>" +
+                    "<option value=''>法杖</option>" +
+                    "<option value=''>魔杖</option>" +
+                    "<option value=''>棍子</option>" +
+                    "<option value=''>矛</option>");
+                form.render();
+            }
+        });
+    });
+</script>
+</html>

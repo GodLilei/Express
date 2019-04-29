@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lol</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/myset.css">
+</head>
+<style>
+    .myicon{
+        font-size: 1.2em;
+        font-weight: lighter;
+        padding-right: 10px;
+    }
+
+    .layui-nav-tree .layui-nav-item a {
+        position: relative;
+        height: 65px;
+        line-height: 65px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .layui-layout-left .layui-nav-item a{
+        width: 40px;
+    }
+    .layui-layout-left .layui-nav-item a i{
+        padding-left: 10px;
+    }
+</style>
+<body>
+<div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>我的推荐</legend>
+    </fieldset>
+</div>
+
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script>
+    layui.use(['carousel', 'form'], function() {
+        var carousel = layui.carousel
+            , form = layui.form;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Schedule</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+</style>
+<blockquote class="layui-elem-quote" style="margin-top: 20px;margin-bottom: 20px">
+    <h2>修改计划</h2>
+</blockquote>
+<body class="mybody">
+<div class="layui-collapse" lay-filter="plan">
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">查询</h2>
+        <div class="layui-colla-content layui-show">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">按时间查询</label>
+                        <div class="layui-input-inline">
+                            <label for="timeType"></label>
+                            <select id="timeType" name="timeType" lay-filter="timeType">
+                                <option value="">请选择列</option>
+                                <option value="create_time">按创建时间</option>
+                                <option value="finish_time">按完成时间</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间范围</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="start_time" name="start_time"
+                                   placeholder="yyyy-MM-dd">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="end_time" name="end_time"
+                                   placeholder="yyyy-MM-dd">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['element', 'layer','form','laydate','table'], function() {
+        var element = layui.element;
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var $ = layui.jquery;
+
+        //js处理
+        /**
+         * 渲染日期格式
+         */
+        laydate.render({
+            elem: '#start_time'
+        });
+        laydate.render({
+            elem: '#end_time'
+        });
+    });
+</script>
+</body>
+</html>

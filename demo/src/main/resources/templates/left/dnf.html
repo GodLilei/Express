@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dnf</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/dnf.css">
+</head>
+<style>
+    .myicon{
+        font-size: 1.2em;
+        font-weight: lighter;
+        padding-right: 10px;
+    }
+
+    .layui-nav-tree .layui-nav-item a {
+        position: relative;
+        height: 65px;
+        line-height: 65px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .layui-layout-left .layui-nav-item a{
+        width: 40px;
+    }
+    .layui-layout-left .layui-nav-item a i{
+        padding-left: 10px;
+    }
+</style>
+<body>
+<div class="my-frame">
+    <blockquote class="layui-elem-quote" style="margin-top: 20px">
+        <h2>我的推荐</h2>
+    </blockquote>
+    <div class="img-group">
+        <div>
+            <div class="img-1">
+            </div>
+            <div class="img-1">
+            </div>
+            <div class="img-1">
+            </div>
+            <div class="img-1">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="my-frame">
+    <blockquote class="layui-elem-quote" style="margin-top: 20px">
+        <h2>我的发现</h2>
+    </blockquote>
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>辅助工具</legend>
+    </fieldset>
+    <div class="my-tool-left">
+        <fieldset class="layui-elem-field my-tool">
+            <legend>爱好</legend>
+            <div class="layui-field-box my-like">
+                <div class="layui-btn-group my-like-btn-group">
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-11">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>打团</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-12">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>漫画</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-13">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>直播</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-14">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>资讯</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-15">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>商城</div>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-elem-field my-tool">
+            <legend>爱好</legend>
+            <div class="layui-field-box my-like">
+                <div class="layui-btn-group my-like-btn-group">
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-21">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>打团</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-22">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>漫画</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-23">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>直播</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-24">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>资讯</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-25">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>商城</div>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field my-tool">
+            <legend>爱好</legend>
+            <div class="layui-field-box my-like">
+                <div class="layui-btn-group my-like-btn-group">
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-31">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>打团</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-32">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>漫画</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-33">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>直播</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-34">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>资讯</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-35">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>商城</div>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field my-tool">
+            <legend>爱好</legend>
+            <div class="layui-field-box my-like">
+                <div class="layui-btn-group my-like-btn-group">
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-41">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>打团</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-42">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>漫画</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-43">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>直播</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-44">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>资讯</div>
+                    </button>
+                    <button class="layui-btn layui-btn-radius layui-btn-primary my-like-btn" id="like-btn-45">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <div>商城</div>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="my-tool-right">
+        <div class="my-news">
+            <img src="../img/4.jpg" height="90" width="120" class="img-2">
+            <div class="img-2-word img-2-title">这里可以写新闻标题这里可以写新闻标题</div>
+            <div class="img-2-content">这里可以写新闻内容内容这里可以内容这里可以内容这里可以内容这里可以这里可以写新闻内容</div>
+            <span class="layui-badge-rim my-badge">资讯</span>
+        </div>
+        <div class="my-news">
+            <img src="../img/4.jpg" height="90" width="120" class="img-2">
+            <div class="img-2-word img-2-title">这里可以写新闻标题这里可以写新闻标题</div>
+            <div class="img-2-content">这里可以写新闻内容内容这里可以内容这里可以内容这里可以内容这里可以这里可以写新闻内容</div>
+            <span class="layui-badge-rim my-badge">资讯</span>
+        </div>
+        <div class="my-news">
+            <img src="../img/4.jpg" height="90" width="120" class="img-2">
+            <div class="img-2-word img-2-title">这里可以写新闻标题这里可以写新闻标题</div>
+            <div class="img-2-content">这里可以写新闻内容这里可以内容这里可以内容这里可以内容这里可以内容这里可以内容这里可以写新闻内容</div>
+            <span class="layui-badge-rim my-badge">资讯</span>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script>
+    layui.use(['carousel', 'form'], function() {
+        var carousel = layui.carousel
+            , form = layui.form
+            ,$ = layui.jquery;
+
+        // $(function () {
+        //     location.hash += 'id=dnf';
+        //     console.log("qweqeq");
+        // });
+    });
+</script>
+</body>
+</html>

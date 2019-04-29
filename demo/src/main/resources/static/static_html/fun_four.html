@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+</style>
+<body class="mybody">
+<div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>Redis数据查询</legend>
+    </fieldset>
+</div>
+<div>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">IP地址</label>
+                <div class="layui-input-inline">
+                    <select name="address" id="address" lay-filter="address">
+                        <option value="">请选择列</option>
+                        <option value="10.129.220.28">10.129.220.28</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">端口</label>
+                <div class="layui-input-inline">
+                    <select name="port" id="port" lay-filter="port">
+                        <option value="">请选择列</option>
+                        <option value="6377">6377</option>
+                        <option value="7130">7130</option>
+                        <option value="7131">7131</option>
+                        <option value="7132">7132</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">查询条件</label>
+                <div class="layui-input-inline">
+                    <select name="redis" id="redis" lay-filter="redis">
+                        <option value="">按单号查</option>
+                        <option value="0">按Redis查</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">单号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="waybill" id="waybill" autocomplete="off" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" id="submitbtn" style="width: 100px;">查询</button>
+                <input type="reset" class="layui-btn layui-btn-primary" style="width: 100px" value="重置"/>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>Redis数据删除</legend>
+    </fieldset>
+</div>
+<div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>表格</legend>
+    </fieldset>
+    <table class="layui-table" lay-filter="myTable" id="myTable"></table>
+</div>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="myBill">
+    {{# var bill = document.getElementById("waybill").value; }}
+    {{# if(d.waybillNo === bill){ }}
+    <span style="color: #F581B1;">{{ d.waybillNo }}</span>
+    {{# }else{ }}
+    <span>{{ d.waybillNo }}</span>
+    {{# } }}
+</script>
+<script>
+    layui.use(['table','layer','form'], function() {
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        form.on('submit(formDemo)',function (data) {
+            $.ajax({
+                data:data.field
+                ,type:'post'
+                ,dataType:'text'
+                ,url:'/redisCheck'
+                ,success:function (data) {
+                    // console.log(JSON.parse(data));
+                    var json = JSON.parse(data);
+                    var myBill = $('#waybill').val();
+                    var len = json.length;
+                    var json2 = [];
+
+                    if ($('#redis').val() === ''){
+                        for (var i = 0; i < len; i++){
+                            if (json[i].waybillNo === myBill){
+                                json2.push(json[i]);
+                            }
+                        }
+                    } else{
+                        json2 =json;
+                    }
+
+                    // console.log(json2);
+
+                    table.render({
+                        elem:'#myTable'
+                        ,data:json2
+                        ,cols:[
+                            [
+                                {type: 'checkbox', fixed: 'left'}
+                                ,{field:'auxOpCode', fixed: 'left',title:'auxOpCode', width:130}
+                                ,{field:'opCode',title:'opCode', width:150}
+                                ,{field:'orgCode',title:'orgCode', width:150}
+                                ,{field:'waybillNo',title:'waybillNo', width:150,templet:'#myBill'}
+                                ,{field:'createTime',title:'createTime', width:200}
+                                ,{field:'desOrgCode',title:'desOrgCode', width:150}
+                                ,{field:'effectiveTypeCode',title:'effectiveTypeCode', width:150}
+                                ,{field:'expressContentCode',title:'expressContentCode', width:150}
+                                ,{field:'id',title:'id', width:150}
+                                ,{field:'inputWeight',title:'inputWeight', width:150}
+                                ,{field:'key',title:'key', width:150}
+                                ,{field:'modifyTime',title:'modifyTime', width:200}
+                                ,{field:'pkgHeight',title:'pkgHeight', width:150}
+                                ,{field:'pkgLength',title:'pkgLength', width:150}
+                                ,{field:'pkgWidth',title:'pkgWidth', width:150}
+                                ,{field:'remark',title:'remark', width:150}
+                                ,{field:'sourceOrgCode',title:'sourceOrgCode', width:150}
+                                ,{field:'uploadTime',title:'uploadTime', width:200}
+                                ,{field:'volumeWeight',title:'volumeWeight', width:150}
+                                ,{field:'weighWeight',title:'weighWeight', width:150}
+                                ,{fixed: 'right',align:'center', toolbar: '#barDemo',title:'操作',width:100}
+                            ]
+                        ]
+                        // ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem）
+                        //     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                        //     , curr: 1 //设定初始在第 1 页
+                        //     , groups: 1 //只显示 1 个连续页码
+                        //     , first: false //不显示首页
+                        //     , last: false //不显示尾页
+                        // }
+                        ,page:true
+                    });
+                }
+            });
+            return false;
+        });
+
+        table.on('tool(myTable)', function(obj){
+            if(obj.event === 'del'){
+                obj.del();
+            }
+        });
+    });
+</script>
+</body>
+</html>

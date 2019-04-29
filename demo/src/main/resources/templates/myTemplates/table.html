@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body style="margin: 20px 20px auto">
+<table class="layui-table" lay-even="">
+    <tr>
+        <th style="width:150px">用户名</th>
+        <th style="width:150px">电话</th>
+        <th style="width:150px">密码</th>
+        <th style="width:150px">邮箱</th>
+        <th style="width:150px">权限</th>
+    </tr>
+    <tr th:each="list:${list}">
+        <td  th:text="${list.uname}"></td>
+        <td  th:text="${list.phone}"></td>
+        <td  th:text="${list.password}"></td>
+        <td  th:text="${list.email}"></td>
+        <td  th:text="${list.temp}"></td>
+    </tr>
+</table>
+</body>
+</html>

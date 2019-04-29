@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body id="dd">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>用户信息表格</legend>
+</fieldset>
+<table class="layui-table" style="width: 90%" lay-data="{height: 'full-200', page:true, id:'idTest',toolbar: '#toolbarDemo',totalRow: true,initSort:{field:'temp',type:'desc'}}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{type: 'checkbox', fixed: 'left'}"></th>
+        <th lay-data="{field:'uname', width:150, sort: true,totalRowText: '合计',fixed: 'left'}">用户名</th>
+        <th lay-data="{field:'phone', width:200,edit: 'text', templet: function(res){
+        return '<em>'+ res.phone +'</em>'
+      }}">电话号码</th>
+        <th lay-data="{field:'password', width:200, event:'setPassword'
+       ,templet: function(res){return '<strong>'+ res.password +'</strong>'}
+            }">密码</th>
+        <th lay-data="{field:'email',event:'setEmail'}">电子邮箱</th>
+        <th lay-data="{field:'temp',templet: '#sexTpl',sort: true, event:'setTemp'}">权限等级</th>
+        <th lay-data="{fixed: 'right', width:200, align:'center', toolbar: '#barDemo'}">操作</th>
+        <!--<th lay-data="{field:'tgrade', sort: true, totalRow: true, event:'setGrade'}">成绩</th>-->
+        <!--<th lay-data="{field:'score', sort: true}">评分</th>-->
+        <!--<th lay-data="{field:'classify'}">职业</th>-->
+        <!--<th lay-data="{field:'wealth', sort: true}">财富</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="list:${list}">
+        <td></td>
+        <td  th:text="${list.uname}"></td>
+        <td  th:text="${list.phone}"></td>
+        <td  th:text="${list.password}"></td>
+        <td  th:text="${list.email}"></td>
+        <td  th:text="${list.temp}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container demoTable">
+        <button class="layui-btn layui-btn-sm" data-type="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" data-type="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" data-type="isAll">验证是否全选</button>
+    </div>
+</script>
+<script type="text/html" id="sexTpl">
+    {{#  if(d.temp === '2'){  }}
+    <span style="color: #F581B1;">{{ d.temp }}</span>
+    {{#  } else {  }}
+    {{ d.temp  }}
+    {{#  }  }}
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" id="look">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../layui/layui.js"></script>
+<script>
+
+    layui.use(['table','layer'], function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        //头工具栏事件
+        var active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+                console.log(data);
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;//data是一个json数据,当前行
+            if(obj.event === 'del'){
+                layer.confirm('真的删除'+ data.uname +'么', function(index){
+                    obj.del();
+                    layer.close(index);
+
+                    $.ajax({
+                        url:'/del'
+                        ,type:'get'
+                        ,data:data
+                        ,dataType:'text'
+                        ,success:function (data) {
+                            layer.msg(data,{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                        ,error:function () {
+                            layer.msg('删除失败！！',{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                    });
+                });
+            }else if (obj.event === 'edit'){
+                layer.msg('请等待后续开发。',{
+                   offset:'100px'
+                });
+            } else if (obj.event === 'detail'){
+                layer.msg('请等待后续开发。',{
+                    offset:'100px'
+                });
+            }
+            else if(obj.event === 'setPassword'){
+                layer.prompt({
+                    title:'编辑[' + data.uname + ']的密码'
+                    ,formType: 2
+                    ,value: data.password
+                }, function(value, index){
+                    obj.update({
+                        password: value
+                    });
+                    data.password = value;
+                    $.ajax({
+                        url:'/setChange'
+                        ,type:'get'
+                        ,data:data
+                        ,dataType:'text'
+                        ,success:function (data) {
+                            layer.msg(data,{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                        ,error:function () {
+                            layer.msg('修改失败！',{
+                                icon:2
+                                ,offset:'100px'
+                            });
+                        }
+                        ,complete: function (XHR, TS) { XHR = null }
+                    });
+                    layer.close(index);
+                });
+            }
+            else if(obj.event === 'setEmail'){
+                layer.prompt({
+                    formType: 2
+                    ,title: '修改['+ data.uname +'] 的电子邮件[' + data.email + ']'
+                    ,value: data.email
+                }, function(value, index){
+                    obj.update({
+                        email: value
+                    });
+                    data.email = value;
+                    $.ajax({
+                        url:'/setChange'
+                        ,type:'get'
+                        ,data:data
+                        ,dataType:'text'
+                        ,success:function (data) {
+                            layer.msg(data,{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                        ,error:function () {
+                            layer.msg('修改失败！',{
+                                icon:2
+                                ,offset:'100px'
+                            });
+                        }
+                        ,complete: function (XHR, TS) { XHR = null }
+                    });
+                    layer.close(index);
+                });
+            }else if (obj.event === 'setTemp'){
+                layer.prompt({
+                    formType: 1
+                    ,title: '请输入超级密码：'
+                    ,btn:['确定','取消']
+                },function (value,index) {
+                    var date = new Date();
+                    var year = date.getFullYear();
+                    var month = date.getMonth()+1;
+                    var day = date.getDate();
+                    var hour = date.getHours();
+                    if (value === ''+(year+month+day+hour) || value === ''+year+month+day+hour){
+                        layer.close(index);
+                        layer.prompt({
+                            formType: 1
+                            ,title: '修改['+ data.uname +'] 的权限[' + data.temp + ']'
+                            ,value: data.temp
+                        }, function(value, index){
+                            obj.update({
+                                temp: value
+                            });
+                            data.temp = value;
+                            $.ajax({
+                                url:'/setChange'
+                                ,type:'get'
+                                ,data:data
+                                ,dataType:'text'
+                                ,success:function (data) {
+                                    layer.msg(data,{
+                                        icon:1
+                                        ,offset:'100px'
+                                    });
+                                }
+                                ,error:function () {
+                                    layer.msg('修改失败！',{
+                                        icon:2
+                                        ,offset:'100px'
+                                    });
+                                }
+                                ,complete: function (XHR, TS) { XHR = null }
+                            });
+                            layer.close(index);
+                        });
+                    }else {
+                        layer.msg('Error Super-Password Description.');
+                        layer.close(index);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>私の管理システム</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .myicon{
+        font-size: 1.2em;
+        font-weight: lighter;
+        padding-right: 10px;
+    }
+
+    .layui-nav-tree .layui-nav-item a {
+        position: relative;
+        height: 60px;
+        line-height: 60px;
+        text-overflow: ellipsis;
+        /*overflow:文本溢出时触发的事件*/
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    /*.layui-layout-left .layui-nav-item a{*/
+    /*width: 40px;*/
+    /*}*/
+    .layui-layout-left .layui-nav-item a i{
+        padding-left: 10px;
+    }
+</style>
+<body class="layui-layout-body">
+<!--这是最大的主题，就是屏幕！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！-->
+<div class="layui-layout layui-layout-admin">
+    <!--这是头部头 头 头 头 头 头 头！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！-->
+    <div class="layui-header">
+        <div class="layui-logo">私の管理システム</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="javascript:;" id="search"><i
+                    class="layui-icon layui-icon-search myicon" title="百度"></i></a></li>
+            <li class="layui-nav-item"><a href="javascript:history.go(-1)" id="book"><i class="layui-icon layui-icon-return myicon" title="返す"></i></a></li>
+            <li class="layui-nav-item"><a href="javascript:;" id="add"><i
+                    class="layui-icon layui-icon-website myicon" title="浏览网址"></i></a></li>
+            <li class="layui-nav-item"><a href="javascript:;" id="fun"><i class="layui-icon layui-icon-app myicon" title="小特集コレクション"></i></a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" id="one">装备词典</a></dd>
+                    <dd><a href="javascript:;" id="two">动态select选择框</a></dd>
+                    <dd><a href="javascript:;" id="three">带转义字符的JSON</a></dd>
+                    <dd><a href="javascript:;" id="four">Redis数据查询</a></dd>
+                    <dd><a href="javascript:;" id="interface">接口测试</a></dd>
+                    <dd><a href="javascript:;" id="express">子系统基本操作</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javascript:;" id="tools"><i class="layui-icon layui-icon-util myicon"
+                                                                            title="小特集コレクション"></i></a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" id="layui">layui</a></dd>
+                    <dd><a href="javascript:;" id="vue">vue</a></dd>
+                    <dd><a href="javascript:;" id="runoob">菜鸟</a></dd>
+                    <dd><a href="javascript:;" id="element">element</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javascript:;" id="otherWebsite"><i
+                    class="layui-icon layui-icon-template-1 myicon" title="外部网址"></i></a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" id="cainiao">菜鸟电子面单</a></dd>
+                    <dd><a href="http://jingang.msns.cn/ytts/CreateOrder" id="zixitong" target="_blank">模拟子系统</a></dd>
+                    <dd><a href="http://172.16.42.110:8080/itools/" id="xiaogongju" target="_blank">内部接口工具</a></dd>
+                </dl>
+            </li>
+            <!--<li class="layui-nav-item"><a href="javascript:;"><input type ="text" class="layui-input" style="height: 58px"></a></li>-->
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <input type="hidden" id="role-temp">
+                    <i class="layui-icon layui-icon-user myicon"></i>
+                    <input type="hidden" th:value="${usermsg.get(0).temp}" id="safe-temp">
+                    <span th:text="''+ ${usermsg.get(0).uname}"></span>
+                    <span>(</span>
+                    <span th:text="${usermsg.get(0).phone}" id="phone"></span>
+                    <span>)</span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" id="my-msg">基本情報</a></dd>
+                    <dd><a href="javascript:;" id="user-msg">ユーザー情報</a></dd>
+                    <dd><a href="javascript:;" id="check-user">特定のルックアップ</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="/">ログインを終了</a></li>
+        </ul>
+    </div>
+    <!--这是左边的那一列左边的左 左 左 左 左 左 左！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！-->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test" id="test">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;"><i class="layui-icon layui-icon-rate myicon"></i>My Game</a>
+                    <dl class="layui-nav-child">
+                        <dd class="layui-this"><a href="javascript:;" id="lol">LOL</a></dd>
+                        <dd><a href="javascript:;" id="dnf">DNF</a></dd>
+                        <dd><a href="javascript:;">QQ FLY</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-face-smile myicon"></i>My Life</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" id="work">Work</a></dd>
+                        <dd><a href="javascript:;">Room</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-rmb myicon"></i>My Money</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">In</a></dd>
+                        <dd><a href="javascript:;">Out</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-cart myicon"></i>My Shopping</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">JinDong</a></dd>
+                        <dd><a href="javascript:;">TaoBao</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-loading myicon"></i>Plan</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" id="new_plan">New</a></dd>
+                        <dd><a href="javascript:;" id="update_plan">Update</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--这是中间的那个框框中间的中 中 中 中 中 中 中 中 中 中 中 中！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！-->
+    <div class="layui-body mybody" id="mybody">
+        <!-- 内容主体区域 -->
+        <div style="border-bottom: #70ff95 solid 5px; margin: 10px 10px auto">
+            <img src="../img/test.png">
+        </div>
+        <iframe id="myiframe" height="97.5%" width="100%" style="margin: 5px" frameborder="0">
+
+        </iframe>
+    </div>
+    <!--这是脚部 脚 脚 脚 脚 脚 脚 脚 脚！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！-->
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © あなたの心で幸せを創造する
+    </div>
+</div>
+<script type="text/javascript" src="../layui/jquery-3.3.1.min.js">
+</script>
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(['element','layer','slider','form','table','carousel'], function(){
+        var element = layui.element;
+        var carousel = layui.carousel;
+        var layer = layui.layer;
+        var slider = layui.slider;
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.jquery;
+
+        $(function () {
+            var safe_temp = $('#safe-temp').val();
+            if (safe_temp === '2'){
+            } else{
+                $('#add').attr('disabled',true);
+                $('#add').css("pointer-events","none");
+            }
+
+            layer.open({
+                title:'今日待做',
+                anim:4,
+                type: 2,
+                content: '/todayThings',
+                shade: 0,
+                area: ['1200px', '650px'],
+                offset:[70,210],
+                maxmin: true,
+                move:false,
+                cancel: function(index, layero){
+                    if(confirm('确定看到了？？？？')){ //只有当点击confirm框的确定时，该层才会关闭
+                        if(confirm('真的？？？？')){
+                            layer.close(index)
+                        }
+                    }
+                    return false;
+                }
+            });
+        });
+
+        $('#cainiao').click(function () {
+            $('#myiframe').attr("src", "http://jingangtest.yto56.com.cn/matcn/Encoder.jsp");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        $('#four').click(function () {
+            $('#myiframe').attr("src", "static_html/fun_four.html");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        $('#interface').click(function () {
+            $('#myiframe').attr("src", "static_html/fun_five.html");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        $('#express').click(function () {
+            $('#myiframe').attr("src", "/mainframe/Express");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        // $('#other').click(function () {
+        //     $('#myiframe').attr("src", "test_page/test_upload.html");
+        //     document.getElementById("mybody").innerHTML = $("#mybody").html();
+        // });
+
+        $('#three').click(function () {
+            $('#myiframe').attr("src", "static_html/fun_three.html");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        $('#new_plan').click(function () {
+            $('#myiframe').attr("src", "/schedule");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        $('#one').click(function () {
+            $('#myiframe').attr("src", "static_html/fun_one.html");
+            document.getElementById("mybody").innerHTML = $("#mybody").html();
+        });
+
+        $('#two').click(function () {
+            $('#myiframe').attr("src","static_html/fun_two.html");
+            document.getElementById("mybody").innerHTML=$("#mybody").html();
+            // layer.open({
+            //     title:'小功能2',
+            //     anim:4,
+            //     type: 2,
+            //     content: 'static_html/fun_two.html',
+            //     shade: 0,
+            //     area: ['1450px', '830px'],
+            //     offset:[70,210],
+            //     maxmin: true,
+            //     move:false,
+            //     cancel: function(index, layero){
+            //         if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+            //             layer.close(index)
+            //         }
+            //         return false;
+            //     }
+            // });
+        });
+
+        $('#search').click(function () {
+            // var index = layer.open({
+            layer.open({
+                title:'百度一下，你就知道',
+                anim:4,
+                type: 2,
+                content: 'http://www.baidu.com',
+                shade: 0,
+                area: ['1450px', '830px'],
+                offset:[70,210],
+                maxmin: true,
+                move:false,
+                cancel: function(index, layero){
+                    if(confirm('閉じてもよろしいですか?')){ //只有当点击confirm框的确定时，该层才会关闭
+                        layer.close(index)
+                    }
+                    return false;
+                }
+            });
+            // layer.full(index);
+        });
+        $('#layui').click(function () {
+            // var index = layer.open({
+            layer.open({
+                title:'layui',
+                anim:4,
+                type: 2,
+                shade: 0,
+                content: 'https://www.layui.com/demo/form.html',
+                area: ['1450px', '830px'],
+                offset:[70,210],
+                maxmin: true
+            });
+            // layer.full(index);
+        });
+        $('#element').click(function () {
+            // var index = layer.open({
+            layer.open({
+                title:'element',
+                anim:4,
+                type: 2,
+                shade: 0,
+                content: 'http://element-cn.eleme.io/#/zh-CN/component/installation',
+                area: ['1450px', '830px'],
+                offset:[70,210],
+                maxmin: true
+            });
+            // layer.full(index);
+        });
+        $('#vue').click(function () {
+            // var index = layer.open({
+            layer.open({
+                title:'vue',
+                anim:4,
+                type: 2,
+                shade: 0,
+                content: 'http://doc.vue-js.com/v2/guide/',
+                area: ['1450px', '830px'],
+                offset:[70,210],
+                maxmin: true
+            });
+            // layer.full(index);
+        });
+        $('#runoob').click(function () {
+            // var index = layer.open({
+            layer.open({
+                title:'layui',
+                anim:4,
+                type: 2,
+                shade: 0,
+                content: 'http://www.runoob.com/',
+                area: ['1450px', '830px'],
+                offset:[70,210],
+                maxmin: true
+            });
+            // layer.full(index);
+        });
+        // $('#book').click(function () {
+        //     // var index = layer.open({
+        //     layer.open({
+        //         title:'笔趣阁之大王饶命',
+        //         anim:4,
+        //         type: 2,
+        //         shade: 0,
+        //         content: 'https://www.biqugexsw.com/35_35872/',
+        //         area: ['1450px', '830px'],
+        //         offset:[70,210],
+        //         maxmin: true
+        //     });
+        //     // layer.full(index);
+        // });
+        $('#add').click(function () {
+            layer.prompt({
+                formType: 2
+                ,value:'http://bbs.colg.cn/forum-171-1.html'
+                ,title: 'URL を入力してください'
+                ,btn:['GO》','取消','历史记录','书签']
+                ,btn3:function (index,layero) {
+                    layer.close(index);
+                    layer.open({
+                        title:'浏览历史',
+                        anim:4,
+                        type: 2,
+                        shade: 0,
+                        content: '/history',
+                        area: ['850px', '415px'],
+                        // offset:[70,210],
+                        maxmin: true,
+                        move: false
+                    });
+                }
+                ,btn4:function (index,layero) {
+                    layer.close(index);
+                    layer.open({
+                        title:'ブックマークの参照',
+                        anim:4,
+                        type: 2,
+                        shade: 0,
+                        content: '/bookmark',
+                        area: ['850px', '415px'],
+                        // offset:[70,210],
+                        maxmin: true,
+                        move: false
+                    });
+                }
+            },function (value,index) {
+
+                var value1 = value;
+                if(value.substring(0,7) === 'http://' || value.substring(0,8) === 'https://' ){
+
+                }else if (value.substring(0,4) === 'www.') {
+                    value1 = 'http://' + value;
+                }
+
+                var sitedata = new SiteData(value1);
+
+                $.ajax({
+                    url:'/saveSite'
+                    ,type:'post'
+                    ,data:sitedata
+                    ,dataType:'text'
+                    // ,success:function (data) {
+                    //     layer.msg(data,{
+                    //         icon:1
+                    //         ,offset:'100px'
+                    //     });
+                    // }
+                    // ,error:function () {
+                    //     layer.msg('修改失败！',{
+                    //         icon:2
+                    //         ,offset:'100px'
+                    //     });
+                    // }
+                    ,complete: function (XHR, TS) { XHR = null }
+                });
+
+                layer.close(index);
+                layer.open({
+                    title:value1,
+                    anim:4,
+                    type: 2,
+                    shade: 0,
+                    content: value1,
+                    area: ['1450px', '830px'],
+                    offset:[70,210],
+                    maxmin: true,
+                    move: false
+                });
+            });
+        });
+        $('#lol').click(function () {
+            $('#myiframe').attr("src","/lol");
+            document.getElementById("mybody").innerHTML=$("#mybody").html();
+        });
+        $('#dnf').click(function () {
+            $('#myiframe').attr("src","/dnf");
+            document.getElementById("mybody").innerHTML=$("#mybody").html();
+        });
+        $('#work').click(function () {
+            $('#myiframe').attr("src","/work");
+            document.getElementById("mybody").innerHTML=$("#mybody").html();
+        });
+        $('#my-msg').click(function () {
+            var phone = document.getElementById("phone").textContent;
+            // var index = layer.open({
+            layer.open({
+                title:'',
+                anim:4,
+                type: 2,
+                content: '/mymsg?phone=' + phone,
+                area: ['1450px', '830px'],
+                offset:[70,210],
+                maxmin: false,
+                cancel: function(index, layero){
+                    if(confirm('ログイン情報の変更がログインインターフェイスにジャンプする場合は、終了確認。')){ //只有当点击confirm框的确定时，该层才会关闭
+                        layer.close(index);
+                        window.location.reload();
+                    }
+                    return false;
+                }
+            });
+            // layer.full(index);
+        });
+        $('#user-msg').click(function () {
+
+            $('#myiframe').attr("src","/fullauthority");
+            document.getElementById("mybody").innerHTML=$("#mybody").html();
+
+            // var safe_temp = $('#safe-temp').val();
+            // if (safe_temp === '0'){
+            //     layer.open({
+            //         title:'',
+            //         anim:4,
+            //         // shade: 0,
+            //         type: 2,
+            //         content: '/noauthority',
+            //         area: ['1450px', '830px'],
+            //         offset:[70,210],
+            //         maxmin: false,
+            //         cancel: function(index, layero){
+            //             if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+            //                 layer.close(index);
+            //                 window.location.reload();
+            //             }
+            //             return false;
+            //         }
+            //     });
+            // }else if (safe_temp === '1'){
+            //     layer.open({
+            //         title:'',
+            //         anim:4,
+            //         // shade: 0,
+            //         type: 2,
+            //         content: '/halfauthority',
+            //         area: ['1450px', '830px'],
+            //         offset:[70,210],
+            //         maxmin: false,
+            //         cancel: function(index, layero){
+            //             if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+            //                 layer.close(index);
+            //                 window.location.reload();
+            //             }
+            //             return false;
+            //         }
+            //     });
+            // } else{
+            //     layer.open({
+            //         title:'',
+            //         anim:4,
+            //         // shade: 0,
+            //         type: 2,
+            //         content: '/fullauthority',
+            //         area: ['1450px', '830px'],
+            //         offset:[70,210],
+            //         maxmin: false,
+            //         cancel: function(index, layero){
+            //             if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+            //                 layer.close(index);
+            //                 window.location.reload();
+            //             }
+            //             return false;
+            //         }
+            //     });
+            // }
+        });
+        $('#check-user').click(function () {
+            var safe_temp = $('#safe-temp').val();
+            if (safe_temp === '0'){
+                layer.open({
+                    title:'',
+                    anim:4,
+                    // shade: 0,
+                    type: 2,
+                    content: '/noauthority',
+                    area: ['1450px', '830px'],
+                    offset:[70,210],
+                    maxmin: false,
+                    cancel: function(index, layero){
+                        if(confirm('閉じてもよろしいですか?')){ //只有当点击confirm框的确定时，该层才会关闭
+                            layer.close(index);
+                            window.location.reload();
+                        }
+                        return false;
+                    }
+                });
+            }else if (safe_temp === '1'){
+                layer.open({
+                    title:'',
+                    anim:4,
+                    // shade: 0,
+                    type: 2,
+                    content: '/halfauthority',
+                    area: ['1450px', '830px'],
+                    offset:[70,210],
+                    maxmin: false,
+                    cancel: function(index, layero){
+                        if(confirm('閉じてもよろしいですか?')){ //只有当点击confirm框的确定时，该层才会关闭
+                            layer.close(index);
+                            window.location.reload();
+                        }
+                        return false;
+                    }
+                });
+            } else{
+                layer.open({
+                    title:'',
+                    anim:4,
+                    // shade: 0,
+                    type: 2,
+                    content: '/checkuser',
+                    area: ['1450px', '830px'],
+                    offset:[70,210],
+                    maxmin: false,
+                    cancel: function(index, layero){
+                        if(confirm('閉じてもよろしいですか?')){ //只有当点击confirm框的确定时，该层才会关闭
+                            layer.close(index);
+                            window.location.reload();
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+
+        carousel.render({
+            elem: '#test1'
+            ,arrow: 'always'
+        });
+
+        //改变下时间间隔、动画类型、高度
+        carousel.render({
+            elem: '#test2'
+            ,interval: 1800
+            ,anim: 'fade'
+            ,height: '120px'
+        });
+
+        //设定各种参数
+        var ins3 = carousel.render({
+            elem: '#test3'
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            ,width: '778px'
+            ,height: '440px'
+            ,interval: 5000
+        });
+
+        //事件
+        carousel.on('change(test4)', function(res){
+            console.log(res)
+        });
+
+        var $ = layui.$, active = {
+            set: function(othis){
+                var THIS = 'layui-bg-normal'
+                    ,key = othis.data('key')
+                    ,options = {};
+
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+
+        //监听开关
+        form.on('switch(autoplay)', function(){
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+
+        $('.demoSet').on('keyup', function(){
+            var value = this.value
+                ,options = {};
+            if(!/^\d+$/.test(value)) return;
+
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+
+        //其它示例
+        $('.demoTest .layui-btn').on('click', function(){
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+
+    });
+
+    function SiteData(value) {
+        this.value = value;
+    }
+
+</script>
+</body>
+</html>

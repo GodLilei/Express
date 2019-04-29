@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>history</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body id="dd">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>浏览书签</legend>
+</fieldset>
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">书签名字</label>
+            <div class="layui-input-inline">
+                <select name="quiz1" id="quiz1" lay-filter="quiz1">
+                    <option value="">请选择列</option>
+                    <option value="uname">名</option>
+                    <option value="temp">アクセス 許可</option>
+                    <option value="phone">電話</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select id="mySelect" lay-search="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="layui-table" style="width: 50%" lay-data="{page:true, id:'idTest',totalRow: true}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{type: 'checkbox', fixed: 'left'}"></th>
+        <th lay-data="{field:'siteName', width:250, totalRowText: '合计',fixed: 'left',event:'setName'}">网站名</th>
+        <th lay-data="{field:'siteAddress', width:430,event:'setAddress',
+       templet: function(res){return '<strong>'+ res.siteAddress +'</strong>'}
+            }">地址</th>
+        <th lay-data="{fixed: 'right', width:117, align:'center', toolbar: '#barDemo'}">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="list:${list}">
+        <td></td>
+        <td  th:text="${list.siteName}"></td>
+        <td  th:text="${list.siteAddress}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container demoTable">
+        <button class="layui-btn layui-btn-sm" data-type="getCheckData">选中数据</button>
+        <button class="layui-btn layui-btn-sm" data-type="getCheckLength">选中数目</button>
+        <button class="layui-btn layui-btn-sm" data-type="isAll">是否全选</button>
+    </div>
+</script>
+<script type="text/html" id="sexTpl">
+    {{#  if(d.temp === '2'){  }}
+    <span style="color: #F581B1;">{{ d.temp }}</span>
+    {{#  } else {  }}
+    {{ d.temp  }}
+    {{#  }  }}
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['table','layer'], function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        //头工具栏事件
+        var active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 条');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;//data是一个json数据,当前行
+            if(obj.event === 'del'){
+                layer.confirm('真的删除么', function(index){
+                    obj.del();
+                    layer.close(index);
+
+                    $.ajax({
+                        url:'/sitedel'
+                        ,type:'get'
+                        ,data:data
+                        ,dataType:'text'
+                        ,success:function (data) {
+                            layer.msg(data,{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                        ,error:function () {
+                            layer.msg('删除失败！！',{
+                                icon:1
+                                ,offset:'100px'
+                            });
+                        }
+                    });
+                });
+            }else if (obj.event === 'save'){
+
+            } else if (obj.event === 'skip'){
+
+            } else if(obj.event === 'setAddress'){
+                layer.prompt({
+                    title:'查看网址'
+                    ,formType: 2
+                    ,value: data.siteAddress
+                    ,btn:['复制','取消']
+                }, function(value, index){
+                    layer.msg('复制功能开发中ing...');
+                    // obj.update({
+                    //     password: value
+                    // });
+                    // data.password = value;
+                    // layer.close(index);
+                });
+            } else if(obj.event === 'setName'){
+                layer.prompt({
+                    title:'编辑名称'
+                    ,formType: 2
+                    ,value: data.siteName
+                    ,btn:['保存','取消']
+                }, function(value, index){
+                    obj.update({
+                        siteName: value
+                    });
+                    data.siteName = value;
+                    layer.close(index);
+                    $.ajax({
+                        data:data
+                        ,url:'/updateSiteName'
+                        ,dataType:'text'
+                        ,type:'post'
+                        ,success:function (data) {
+                            layer.msg(data);
+                        }
+                        ,error:function () {
+                            layer.msg('本地修改成功，数据库修改失败')
+                        }
+                    });
+                });
+            }
+            // else if(obj.event === 'setEmail'){
+            //     layer.prompt({
+            //         formType: 2
+            //         ,title: '修改['+ data.uname +'] 的电子邮件[' + data.email + ']'
+            //         ,value: data.email
+            //     }, function(value, index){
+            //         obj.update({
+            //             email: value
+            //         });
+            //         data.email = value;
+            //         $.ajax({
+            //             url:'/setChange'
+            //             ,type:'get'
+            //             ,data:data
+            //             ,dataType:'text'
+            //             ,success:function (data) {
+            //                 layer.msg(data,{
+            //                     icon:1
+            //                     ,offset:'100px'
+            //                 });
+            //             }
+            //             ,error:function () {
+            //                 layer.msg('修改失败！',{
+            //                     icon:2
+            //                     ,offset:'100px'
+            //                 });
+            //             }
+            //             ,complete: function (XHR, TS) { XHR = null }
+            //         });
+            //         layer.close(index);
+            //     });
+            // }else if (obj.event === 'setTemp'){
+            //     layer.prompt({
+            //         formType: 1
+            //         ,title: '请输入超级密码：'
+            //         ,btn:['确定','取消']
+            //     },function (value,index) {
+            //         var date = new Date();
+            //         var year = date.getFullYear();
+            //         var month = date.getMonth()+1;
+            //         var day = date.getDate();
+            //         var hour = date.getHours();
+            //         if (value === ''+(year+month+day+hour) || value === ''+year+month+day+hour){
+            //             layer.close(index);
+            //             layer.prompt({
+            //                 formType: 1
+            //                 ,title: '修改['+ data.uname +'] 的权限[' + data.temp + ']'
+            //                 ,value: data.temp
+            //             }, function(value, index){
+            //                 obj.update({
+            //                     temp: value
+            //                 });
+            //                 data.temp = value;
+            //                 $.ajax({
+            //                     url:'/setChange'
+            //                     ,type:'get'
+            //                     ,data:data
+            //                     ,dataType:'text'
+            //                     ,success:function (data) {
+            //                         layer.msg(data,{
+            //                             icon:1
+            //                             ,offset:'100px'
+            //                         });
+            //                     }
+            //                     ,error:function () {
+            //                         layer.msg('修改失败！',{
+            //                             icon:2
+            //                             ,offset:'100px'
+            //                         });
+            //                     }
+            //                     ,complete: function (XHR, TS) { XHR = null }
+            //                 });
+            //                 layer.close(index);
+            //             });
+            //         }else {
+            //             layer.msg('Error Super-Password Description.');
+            //             layer.close(index);
+            //         }
+            //     });
+            // }
+        });
+    });
+
+
+</script>
+</body>
+</html>

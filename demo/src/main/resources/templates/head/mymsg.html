@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <title>mymsg</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    body{
+        background-color: #f2f2f2;
+    }
+    .my-frame{
+        width: 98.5%;
+        margin: 10px 10px auto;
+        background-color: white;
+    }
+    .msg-title{
+        /*position: relative;*/
+        /*left: 10px;*/
+        /*top: 10px;*/
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 10px;
+        font-size: 1.5em;
+        font-weight: lighter;
+        border-bottom: 1px solid #f2f2f2;
+    }
+    .my-form{
+        margin-left: 100px;
+        margin-top:30px;
+        margin-bottom: 30px;
+        width: 50%;
+    }
+    .demo-slider{
+        margin: 35px 2px 40px 113px;
+    }
+    .red-border{
+        border: 1px solid #ffa09c;
+    }
+    .green-border{
+        border: 1px solid #8effb2;
+    }
+</style>
+<body>
+<div class="my-frame">
+    <input type="hidden" th:value="${usermsg.get(0).temp}" id="temp">
+    <div class="msg-title">基本情報の設定</div>
+    <div class="my-form">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">私の役目だ</label>
+                <div class="layui-input-block">
+                    <select name="myrole" lay-filter="role" id="role1" disabled>
+                        <option value="0">通常のユーザー</option>
+                        <option value="1">管理者</option>
+                        <option value="2">スーパー管理者</option>
+                    </select>
+                    <!--<input type="text" id="phone" name="phone" required  lay-verify="required" placeholder="请输入手机号码" autocomplete="off" class="layui-input">-->
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">ニックネーム</label>
+                <div class="layui-input-block">
+                    <input type="text" id="username" name="username" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input" th:value="${usermsg.get(0).uname}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">電話</label>
+                <div class="layui-input-block">
+                    <input type="text" id="phone" name="phone" required  lay-verify="required" placeholder="電話を入力してください" readonly autocomplete="off" class="layui-input" th:value="${usermsg.get(0).phone}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">电子邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" id="email" name="email" required  lay-verify="required" placeholder="メールボックスを入力してください" autocomplete="off" class="layui-input"th:value="${usermsg.get(0).email}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="password" id="password" name="password" required readonly lay-verify="required" placeholder="パスワード" autocomplete="off" class="layui-input red-border" th:value="${usermsg.get(0).password}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">查看密码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="demoReload" placeholder="スライダをドラッグして確認してください。" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div id="slideTest" class="demo-slider"></div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn demo-slider" lay-submit lay-filter="formDemo" style="width: 100px">変更の決定</button>
+                <button class="layui-btn layui-btn-primary" style="width: 100px" onclick="resetBtn()">リセット</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="../layui/layui.js"></script>
+<script>
+    var role = document.getElementById('role1');
+    var temp_select = document.getElementById('temp').value;
+    role[temp_select].selected = true;//选中
+
+    function resetBtn() {
+        document.getElementById('username').value='';
+        document.getElementById('email').value='';
+    }
+</script>
+<script>
+    layui.use(['form','slider','layer'],function () {
+        var form = layui.form;
+        var slider = layui.slider;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        var temp = Math.random()*50;
+        temp = Math.ceil(temp);
+        slider.render({
+            elem: '#slideTest'
+            ,input: true //输入框
+            ,change:function (value) {
+                $('#demoReload').attr('placeholder','計算'+ temp + '+'+ temp +'的值,パスワード入力ボックスのロック解除。');
+                if (Math.abs(value-temp*2) ===0){
+                    $('#password').removeClass('red-border');
+                    $('#password').addClass('green-border');
+                    document.all.password.type = 'text';
+                    document.all.password.readOnly = false;
+                }else{
+                    $('#password').removeClass('green-border');
+                    $('#password').addClass('red-border');
+                    document.all.password.type = 'password';
+                    document.all.password.readOnly = true;
+                }
+            }
+        });
+
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                url:'/updatemsg'
+                ,type:'post'
+                ,data:data.field
+                ,dataType:'text'
+                ,success:function (data) {
+                    layer.msg(data,{
+                        icon:1
+                        ,offset:'100px'
+                    });
+                }
+                ,error:function () {
+
+                }
+                ,complete: function (XHR, TS) { XHR = null }
+            });
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

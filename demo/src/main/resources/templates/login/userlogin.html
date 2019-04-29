@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户登陆</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 500px;
+        height: 600px;
+        /*background-color: #00FF00;*/
+        margin: 100px auto;
+    }
+    .mytitle{
+        width: 80%;
+        height: 120px;
+        /*background-color: #bc3130;*/
+        margin: 0 auto;
+        padding: 0;
+    }
+    .myform{
+        width: 80%;
+        margin: 0 auto;
+        /*background-color: #00FF00;*/
+        padding: 0;
+    }
+    .myfoot{
+
+    }
+    body{
+        background-color: #d4efea;
+    }
+    p,h1{
+        text-align: center;
+        font-family: 微软雅黑;
+        font-size: 30px;
+        padding-top: 40px;
+        line-height: 5px;
+    }
+    h1{
+        font-size: 15px;
+        font-weight: lighter;
+        padding-top: 30px;
+        color: gray;
+    }
+    .demo-slider{
+        margin: 35px 2px 40px 10px;
+    }
+    .myregister{
+        float: right;
+        margin-right: 13px;
+        margin-top: 5px;
+        color: #86c967;
+    }
+</style>
+<body>
+<div class="mybody">
+    <div class="mytitle">
+        <p>ユーザーログイン</p>
+        <h1>ユーザーログインページ</h1>
+    </div>
+    <div class="myform">
+        <form class="layui-form layui-form-pane" action="/mainframe" method="post">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-cellphone"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="text" name="phone" id="phone" required placeholder="電話を入力してください" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-password"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="password" name="password" id="password" required  lay-verify="required" placeholder="パスワード" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-vercode"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="text" id="demoReload" placeholder="スライダをドラッグして確認してください。" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div id="slideTest" class="demo-slider"></div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom: 20px">
+                <input type="checkbox" name="remember" id="remember" lay-skin="primary" title="パスワードの保存">
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                    <span>パスワードの保存</span>
+                    <i class="layui-icon layui-icon-ok"></i>
+                </div>
+                <a href="/gotoregister" class="myregister">アカウントを登録して、go!</a>
+            </div>
+            <div class="layui-form-item">
+                <input type="submit" class="layui-btn layui-btn-fluid layui-btn-disabled" disabled lay-filter="submitBtn" id="submitBtn" value="登録" />
+            </div>
+        </form>
+    </div>
+    <div class="myfoot">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script>
+    layui.use(['form','layer','slider'],function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var slider = layui.slider;
+        var $ = layui.jquery;
+
+        //滑块验证随机数
+        var temp = Math.random()*100;
+        temp = Math.ceil(temp);
+        slider.render({
+            elem: '#slideTest'
+            ,input: true //输入框
+            ,change:function (value) {
+                $('#demoReload').attr('placeholder','请将滑块拉动至'+ temp +'附近处');
+                if (Math.abs(value-temp) < 5){
+                    $('#submitBtn').removeClass('layui-btn-disabled');
+                    document.all.submitBtn.disabled = false;
+                }else{
+                    $('#submitBtn').addClass('layui-btn-disabled');
+                    document.all.submitBtn.disabled = true;
+                }
+            }
+        });
+
+        //获取表单数据
+        // form.on('submit(submitBtn)', function(data){
+        //     layer.msg(JSON.stringify(data.field));
+        //     console.log(data.field);
+        //     return false;
+        // });
+
+        //其他+++++++++
+    });
+</script>
+</body>
+</html>

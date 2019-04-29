@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 95.5%;
+        margin: auto;
+        margin-top: 20px;
+    }
+    body{
+        background-color: #f2f2f2;
+    }
+</style>
+<body class="mybody">
+<p style="margin-bottom: 15px">选择网点，客户和商家，然后选择需要操作的流程（测试版）
+    <span style="color: red">特别注意：一次最多添加10个操作（多了有时会出bug）</span></p>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">绑定客户</label>
+            <div class="layui-input-inline">
+                <label for="customer"></label>
+                <select id="customer" name="customer" lay-search="" lay-filter="customer">
+                    <option value=""></option>
+                    <option value="K21002107" selected>K21002107</option>
+                    <option value="K21000865">K21000865</option>
+                </select>
+            </div>
+            <label class="layui-form-label">绑定网点</label>
+            <div class="layui-input-inline">
+                <label for="sourceOrgCode"></label>
+                <select id="sourceOrgCode" name="sourceOrgCode" lay-search="" lay-filter="sourgeOrgCode">
+                    <option value="210077" selected>210077</option>
+                    <option value="210045">210045</option>
+                    <option value="766001">766001</option>
+                    <option value="210901">210901</option>
+                    <option value="200901">200901</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label" id="chooseLabel">快件操作</label>
+            <div class="layui-input-inline">
+                <label for="expPro"></label>
+                <select id="expPro" name="expPro" lay-search="" lay-filter="expPro">
+                    <option value=""></option>
+                    <option value="taking" selected>揽收</option>
+                    <option value="build">建包</option>
+                    <option value="xiache">下车</option>
+                    <option value="tuihui">退回</option>
+                    <option value="handon">派件</option>
+                    <option value="signature">签收</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <label for="orgCode"></label>
+                <select id="orgCode" name="orgCode" lay-search="" lay-filter="orgCode">
+                    <option value="210077">210077</option>
+                    <option value="210045">210045</option>
+                    <option value="766001">766001</option>
+                    <option value="210901">210901</option>
+                    <option value="200901">200901</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal" lay-submit id="chooseBtn"
+                        name="chooseBtn"
+                        lay-filter="chooseBtn">选择
+                </button>
+                <button class="layui-btn layui-btn-normal" lay-submit id="add"
+                        name="add"
+                        lay-filter="add">添加
+                </button>
+                <!--<input type="hidden" id="dayTaskType" name="dayTaskType">-->
+
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">走件预览</label>
+        <div class="layui-input-block">
+                            <textarea placeholder="任务描述" class="layui-textarea" name="content"
+                                      id="content" readonly></textarea>
+        </div>
+    </div>
+    <!--<input type="hidden" id="relContent" name="relContent">-->
+</form>
+<table class="layui-table" lay-filter="taskTable" id="taskTable"></table>
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container demoTable">
+        <button class="layui-btn layui-btn-sm" lay-event="uploadSelect">上传选中数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteTable">清空列表</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+    layui.use(['element', 'layer','form','laydate','table'], function() {
+        let element = layui.element;
+        let layer = layui.layer;
+        let form = layui.form;
+        let table = layui.table;
+        let $ = layui.jquery;
+
+        let content = '';
+        let contentTable;
+        let valueTable;
+
+        let tableObj = table.render({
+            elem: '#taskTable',
+            data: [],
+            toolbar: '#toolbarDemo',
+            cols:[
+                [
+                    {type:'checkbox', fixed: 'left'}
+                    ,{field:'customer',title:'客户', width:'15%'}
+                    ,{field:'orgCode',title:'网点', width:'15%'}
+                    // ,{field:'createTime',title:'创建时间', width:'15%'}
+                    ,{field:'expPro',title:'走件预览', width:'50%'}
+                    // ,{field:'user',title:'操作人', width:'10%'}
+                    ,{fixed:'right',align:'center', toolbar: '#barDemo',title:'操作',width:'15%'}
+                ]
+            ],
+            limit:10,
+            page:true
+        });
+
+        form.on('submit(chooseBtn)',function (data) {
+            let relExpPro = data.field.expPro;
+            let relOrgCode = data.field.orgCode;
+            let expPro = $('#expPro option:selected').text();
+            content += expPro + relOrgCode + '|';
+            $('#content').val(content);
+            return false;
+        });
+        form.on('submit(add)',function (data) {
+
+            if (content !== ''){
+                let ct = $('#content');
+                contentTable = new EP($('#customer').val(),$('#sourceOrgCode').val(),ct.val());
+                valueTable = table.cache['taskTable'];
+                valueTable.push(contentTable);
+                tableObj.reload({
+                    data:valueTable
+                });
+                ct.val('');
+                content = '';
+            }else {
+                layer.msg("走件不能为空！！");
+            }
+            return false;
+        });
+
+        table.on('toolbar(taskTable)', function(obj){
+            let checkStatus = table.checkStatus('taskTable');
+            switch(obj.event){
+                case 'uploadSelect':
+                    let test = {};
+                    let selectData = table.checkStatus('taskTable');
+                    let data = selectData.data;//表格中被选择的数据[{},{},{}........]
+                    console.log(selectData);
+                    test["batchData"] = data;
+                    let batchData = JSON.stringify(test);
+                    console.log('the value:' + batchData);
+                    $.ajax({
+                        data: batchData,
+                        dataType: 'text',
+                        contentType:'application/json;charset=UTF-8',
+                        type:'post',
+                        url:'/batchAdd',
+                        success: function (data) {
+                            layer.msg(data);
+                        },
+                        error: function () {
+                        }
+                    });
+                    break;
+                case 'deleteTable':
+                    let valueTable = [];
+                    table.reload('taskTable',{
+                        data:valueTable
+                    });
+                    break;
+            }
+        });
+        table.on('tool(taskTable)', function(obj){
+            if(obj.event === 'del'){
+                obj.del();
+            }
+            valueTable = table.cache['taskTable'];
+        });
+
+        function EP(customer,orgCode,expPro) {
+            this.customer = customer;
+            this.orgCode = orgCode;
+            this.expPro = expPro;
+        }
+
+    });
+</script>
+</body>
+</html>

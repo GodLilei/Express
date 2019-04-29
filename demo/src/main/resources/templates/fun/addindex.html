@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 98.5%;
+        margin: 10px 10px auto;
+    }
+</style>
+<body class="mybody">
+<div style="width: 75%;margin: 20px auto" >
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">場所の選択</label>
+                <div class="layui-input-inline">
+                    <select name="quiz2" id="quiz2" lay-filter="quiz2">
+                        <option value="">请选择列</option>
+                        <option value="all">总公司</option>
+                        <option value="center">中心</option>
+                        <option value="point">网点</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select id="place" lay-search="" name="place" lay-filter="place">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">電話</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="phone" id="phone" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">サイクル</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="days" id="days" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo" id="submitbtn" style="width: 100px;">見つける</button>
+                    <input type="reset" class="layui-btn layui-btn-primary" style="width: 100px" value="リセット"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="../layui/jquery-3.3.1.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['table','layer','form'], function() {
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+    });
+</script>
+</body>
+</html>

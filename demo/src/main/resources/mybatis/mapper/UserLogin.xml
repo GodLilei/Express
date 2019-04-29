@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--你接口的包名是com.abc.dao,接口名是NameMapper.java，那么你的mapper.xml的namespace应该是com.abc.dao.NameMapper-->
+<mapper namespace="com.myproject.demo.dao.UserLoginDao" >
+
+    <!--resultMap对应的是表与实体类的映射  - type 数据库表对应的实体类，别名或完整类名都可以-->
+    <resultMap id="BaseResultMap" type="com.myproject.demo.entity.UserLogin" >
+        <!-- 结果集的主键 -->
+        <id column="phone" property="phone" jdbcType="VARCHAR" />
+
+        <!-- 普通的列  -column 是数据库中字段， property是实体类中字段-->
+        <result column="uname" property="uname" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="temp" property="temp" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="ScheduleMap" type="com.myproject.demo.entity.Schedule">
+        <!-- 结果集的主键 -->
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <!-- 普通的列  -column 是数据库中字段， property是实体类中字段-->
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="update_time" property="update_time" jdbcType="DATE" />
+        <result column="create_time" property="create_time" jdbcType="DATE" />
+        <result column="finish_time" property="finish_time" jdbcType="DATE" />
+        <result column="status" property="status" jdbcType="CHAR" />
+    </resultMap>
+    <resultMap id="siteResultMap" type="com.myproject.demo.entity.Site" >
+        <!-- 结果集的主键 -->
+        <!-- 普通的列  -column 是数据库中字段， property是实体类中字段-->
+        <result column="siteName" property="siteName" jdbcType="VARCHAR" />
+        <result column="siteAddress" property="siteAddress" jdbcType="VARCHAR" />
+        <result column="accessTime" property="accessTime" jdbcType="DATE" />
+    </resultMap>
+    <resultMap id="billIndexResultMap" type="com.myproject.demo.entity.Warning_Index" >
+        <!-- 结果集的主键 -->
+        <!-- 普通的列  -column 是数据库中字段， property是实体类中字段-->
+        <result column="type_code" property="type_code" jdbcType="VARCHAR" />
+        <result column="type_name" property="type_name" jdbcType="VARCHAR" />
+        <result column="place_code" property="place_code" jdbcType="VARCHAR" />
+        <result column="place_name" property="place_name" jdbcType="VARCHAR" />
+        <result column="max_money" property="max_money" jdbcType="DOUBLE" />
+        <result column="max_qty" property="max_qty" jdbcType="DOUBLE" />
+        <result column="max_weight" property="max_weight" jdbcType="DOUBLE" />
+        <result column="days" property="days" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="create_time" property="create_time" jdbcType="DATE" />
+    </resultMap>
+    <resultMap id="placeResultMap" type="com.myproject.demo.entity.Place" >
+        <!-- 结果集的主键 -->
+        <!-- 普通的列  -column 是数据库中字段， property是实体类中字段-->
+        <result column="place_code" property="place_code" jdbcType="VARCHAR" />
+        <result column="place_name" property="place_name" jdbcType="VARCHAR" />
+        <result column="place_type" property="place_type" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--parameterType(输入类型)、resultType(输出类型)-->
+    <select id="selectAllMsg" resultMap="BaseResultMap" parameterType="com.myproject.demo.entity.UserLogin">
+        select * from suser
+    </select>
+    <select id="selectUname" resultMap="BaseResultMap">
+        select uname,temp,phone from suser
+    </select>
+    <select id="selectTemp" resultMap="BaseResultMap">
+        select temp from suser group by temp
+    </select>
+    <select id="selectByNameOrTemp" resultMap="BaseResultMap">
+        select * from suser
+        where 1 = 1
+        <if test="userlogin.uname != ''">
+            and uname like '%${userlogin.uname}%'
+        </if>
+        <if test="userlogin.temp != ''">
+            and temp = #{userlogin.temp}
+        </if>
+    </select>
+    <select id="selectLastTest" resultMap="BaseResultMap">
+        select PASSWORD from suser where phone=#{userlogin.phone};
+    </select>
+    <select id="selectSiteHistory" resultMap="siteResultMap">
+        select * from site where temp = '0'
+    </select>
+    <select id="selectlogin" resultMap="BaseResultMap" parameterType="com.myproject.demo.entity.UserLogin">
+        select * from suser where phone=#{userlogin.phone};
+    </select>
+
+    <select id="selectSiteBookMark" resultMap="siteResultMap">
+        select * from site where temp = '1'
+    </select>
+    <select id="selectPlace" resultMap="placeResultMap">
+        select * from Place where place_type = #{place.place_type}
+    </select>
+
+    <select id="selectBillIndex" resultMap="billIndexResultMap">
+        select * from warning_index
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="billIndex.place_code != '' and billIndex.place_code != null">
+                place_code = #{billIndex.place_code}
+            </if>
+            <if test="billIndex.phone != '' and billIndex.phone != null">
+                and phone like '%${billIndex.phone}%'
+            </if>
+            <if test="billIndex.days != '' and billIndex.days != null">
+                and days = #{billIndex.days}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertlogin" parameterType="com.myproject.demo.entity.UserLogin">
+        insert into suser values (#{userlogin.uname},#{userlogin.phone},#{userlogin.password},#{userlogin.email},'0')
+    </insert>
+
+    <update id="updateuser">
+        update suser set uname = #{userlogin.uname},email = #{userlogin.email},password = #{userlogin.password},temp = #{userlogin.temp} where phone=#{userlogin.phone}
+    </update>
+    <delete id="deleteData">
+        delete from suser where phone=#{userlogin.phone}
+    </delete>
+    <insert id="saveSite" parameterType="com.myproject.demo.entity.Site">
+        insert into site values (#{site.siteName},#{site.siteAddress},STR_TO_DATE(#{site.accessTime},'%Y-%m-%d %H:%i:%S'),'0')
+    </insert>
+
+    <delete id="deleteSiteData">
+        delete from site where siteAddress=#{site.siteAddress}
+    </delete>
+    <update id="updateSiteName">
+        update site set siteName = #{site.siteName} where siteAddress = #{site.siteAddress}
+    </update>
+    <update id="updateTemp">
+        update site set temp = '1' where siteAddress = #{site.siteAddress}
+    </update>
+
+    <delete id="delIndex">
+        delete from warning_index where type_code = #{delIndex.type_code} and place_code = #{delIndex.place_code}
+    </delete>
+    <insert id="insertIndex" parameterType="com.myproject.demo.entity.Warning_Index">
+        insert into warning_index
+        values (#{insertIndex.type_code},
+                #{insertIndex.type_name},
+                #{insertIndex.place_code},
+                #{insertIndex.place_name},
+                #{insertIndex.max_money},
+                #{insertIndex.max_qty},
+                #{insertIndex.max_weight},
+                #{insertIndex.days},
+                #{insertIndex.phone},
+                STR_TO_DATE(#{insertIndex.create_time},'%Y-%m-%d')
+        )
+    </insert>
+
+
+
+</mapper>

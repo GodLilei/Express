@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mycarousel{
+        margin: 10px auto;
+    }
+    .myicon{
+        font-size: 1.2em;
+        font-weight: lighter;
+        padding-right: 10px;
+    }
+
+    .layui-nav-tree .layui-nav-item a {
+        position: relative;
+        height: 65px;
+        line-height: 65px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .layui-layout-left .layui-nav-item a{
+        width: 40px;
+    }
+    .layui-layout-left .layui-nav-item a i{
+        padding-left: 10px;
+    }
+</style>
+<body>
+    <div style="padding: 15px;">内容主体区域</div>
+    <div><h1>1212</h1></div>
+    <div><h1>1212</h1></div>
+    <div>IPv4 地址:	192.168.8.203
+        IPv4 DNS 服务器:	202.96.209.5
+        210.22.70.3
+        制造商:	Realtek
+        描述:	Realtek PCIe GBE Family Controller
+        驱动程序版本:	10.24.1208.2017
+        物理地址(MAC):	D8-9E-F3-2F-8B-E2
+    </div>
+    <strong class="layui-icon layui-icon-auz" style="font-size: 30px; color: #1E9FFF;"></strong>
+    <div class="layui-anim layui-anim-up" style="font-size: 70px">123</div>
+
+    按钮<br>
+    <button class="layui-btn layui-btn-disabled">一个标准的按钮</button>
+    <a href="javascript:void(0)" class="layui-btn">一个可跳转的按钮</a>
+    <br>流体适应按钮
+    <button class="layui-btn layui-btn-fluid layui-btn-danger">流体按钮（最大化适应）</button>
+    <button class="layui-btn">
+        <i class="layui-icon layui-icon-404"></i> 添加
+    </button>
+    <div class="layui-btn-group">
+        <button class="layui-btn">增加</button>
+        <button class="layui-btn">编辑</button>
+        <button class="layui-btn">删除</button>
+    </div>
+
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-sm">
+            <i class="layui-icon">&#xe654;</i>
+        </button>
+        <button class="layui-btn layui-btn-sm">
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button class="layui-btn layui-btn-sm">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+        <button class="layui-btn layui-btn-sm">
+            <i class="layui-icon">&#xe602;</i>
+        </button>
+    </div>
+
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm">
+            <i class="layui-icon">&#xe654;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm">
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+    <script type="text/javascript" src="../layui/layui.js">
+    </script>
+    <script>
+        layui.use(['carousel', 'form'], function() {
+            var carousel = layui.carousel
+                , form = layui.form;
+
+            carousel.render({
+                elem: '#test1'
+                ,arrow: 'always'
+            });
+
+            carousel.render({
+                elem: '#carousel'
+                ,width: '90%'
+                ,height: '200px'
+                ,interval: 3000
+            });
+
+            var $ = layui.$, active = {
+                set: function(othis){
+                    var THIS = 'layui-bg-normal'
+                        ,key = othis.data('key')
+                        ,options = {};
+
+                    othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                    options[key] = othis.data('value');
+                    ins3.reload(options);
+                }
+            };
+
+        });
+    </script>
+</body>
+</html>

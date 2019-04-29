@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myproject.demo.dao.ExpressProcessDao">
+    <insert id="insertExpPro">
+        insert into express_msg(
+            user,
+            waybill_no,
+            create_time,
+            customer,
+            org_code,
+            operate,
+            other
+        ) values (
+            #{msg.user},
+            #{msg.waybill_no},
+            #{msg.create_time},
+            #{msg.customer},
+            #{msg.org_code},
+            #{msg.operate},
+            #{msg.other}
+        )
+    </insert>
+    <select id="queryByWaybillNo" resultType="com.myproject.demo.entity.ExpressProcess">
+        select * from express_msg where waybill_no = #{waybillNo}
+    </select>
+    <update id="updateExpPro">
+        update express_msg set
+            operate = #{msg.operate}
+        where
+            waybill_no = #{msg.waybill_no}
+    </update>
+    <select id="expressDetail" resultType="com.myproject.demo.entity.ExpressProcess">
+        select * from express_msg
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="detail.user != 'admin' and detail.user != null">
+                user = #{detail.user}
+            </if>
+        </trim>
+    </select>
+    <delete id="delExpPro">
+        delete from express_msg
+        where waybill_no in
+        <foreach collection="array" index="index" item="array" open="(" separator="," close=")">
+            #{array}
+        </foreach>
+    </delete>
+</mapper>

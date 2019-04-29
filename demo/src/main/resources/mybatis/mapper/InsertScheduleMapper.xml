@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myproject.demo.dao.InsertScheduleDao">
+    <insert id="insertSchedule" parameterType="com.myproject.demo.entity.InsertSchedule">
+        insert into schedule(type,title,content,update_time,create_time,finish_time,status)
+        values (
+                #{insertschedule.type},
+                #{insertschedule.title},
+                #{insertschedule.content},
+                STR_TO_DATE(#{insertschedule.update_time},'%Y-%m-%d'),
+                STR_TO_DATE(#{insertschedule.create_time},'%Y-%m-%d'),
+                STR_TO_DATE(#{insertschedule.finish_time},'%Y-%m-%d'),
+                #{insertschedule.status}
+        )
+    </insert>
+
+    <select id="selectDayTask" resultType="com.myproject.demo.entity.DayTask">
+        select * from daytask
+    </select>
+
+</mapper>

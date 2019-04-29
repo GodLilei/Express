@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户注册</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<style>
+    .mybody{
+        width: 500px;
+        height: 600px;
+        /*background-color: #00FF00;*/
+        margin: 100px auto;
+    }
+    .mytitle{
+        width: 80%;
+        height: 120px;
+        /*background-color: #bc3130;*/
+        margin: 0 auto;
+        padding: 0;
+    }
+    .myform{
+        width: 80%;
+        margin: 0 auto;
+        /*background-color: #00FF00;*/
+        padding: 0;
+    }
+    .myfoot{
+
+    }
+    body{
+        background-color: #d4efea;
+    }
+    p,h1{
+        text-align: center;
+        font-family: 微软雅黑;
+        font-size: 30px;
+        padding-top: 40px;
+        line-height: 5px;
+    }
+    h1{
+        font-size: 15px;
+        font-weight: lighter;
+        padding-top: 30px;
+        color: gray;
+    }
+    .demo-slider{
+        margin: 35px 2px 40px 10px;
+    }
+    .myfont{
+        font-size: 1.3em;
+    }
+</style>
+<body>
+<div class="mybody">
+    <div class="mytitle">
+        <p>ユーザー登録</p>
+        <h1>ユーザー情報登録 Web ページ</h1>
+    </div>
+    <div class="myform">
+        <form class="layui-form layui-form-pane" action="/register" method="post">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-cellphone myfont"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="text" id="phone" name="phone" required  lay-verify="required|phone" placeholder="電話を入力してください" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-website myfont"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="text" id="email" name="email" required  lay-verify="required|email" placeholder="メールボックス" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-password myfont"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="password" id="password" name="password" required  lay-verify="required" placeholder="パスワード" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-password myfont"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="password" name="passwordagain" required  lay-verify="required" placeholder="パスワードの確認" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-username myfont"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="text" id="uname" name="uname" required  lay-verify="required" placeholder="ニックネーム" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label" style="width: 50px"><i class="layui-icon layui-icon-vercode myfont"></i></label>
+                <div class="layui-input-block" style="background-color: white;margin-left: 50px">
+                    <input type="text" id="demoReload" placeholder="スライダをドラッグして確認してください。" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div id="slideTest" class="demo-slider"></div>
+            </div>
+            <div class="layui-form-item">
+                    <input type="submit" class="layui-btn layui-btn-fluid layui-btn-disabled" disabled lay-submit lay-filter="submitBtn" id="submitBtn" value="アカウントを追加する"/>
+            </div>
+        </form>
+    </div>
+    <div class="myfoot">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script>
+    layui.use(['form','layer','slider'],function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var slider = layui.slider;
+        var $ = layui.jquery;
+
+        //滑块验证随机数
+        var temp = Math.random()*100;
+        temp = Math.ceil(temp);
+        slider.render({
+            elem: '#slideTest'
+            ,input: true //输入框
+            ,change:function (value) {
+                $('#demoReload').attr('placeholder','请将滑块拉动至'+ temp +'附近处');
+                if (Math.abs(value-temp) < 5){
+                    $('#submitBtn').removeClass('layui-btn-disabled');
+                    document.all.submitBtn.disabled = false;
+                }else{
+                    $('#submitBtn').addClass('layui-btn-disabled');
+                    document.all.submitBtn.disabled = true;
+                }
+            }
+        });
+
+        //获取表单数据
+        // form.on('submit(submitBtn)', function(data){
+        //     layer.msg(JSON.stringify(data.field));
+        //     console.log(data.field);
+        //
+        //     $.ajax({
+        //         url:'/register'
+        //         ,type:'post'
+        //         ,data:data.field
+        //         ,dataType:'text'
+        //         ,success:function (data) {
+        //             window.location.href="/test";
+        //         }
+        //         ,error:function () {
+        //
+        //         }
+        //     });
+        // });
+
+        //其他+++++++++
+    });
+</script>
+</body>
+</html>
