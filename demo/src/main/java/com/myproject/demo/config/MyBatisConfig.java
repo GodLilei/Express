@@ -70,6 +70,26 @@ public class MyBatisConfig implements EnvironmentAware {
         return DruidDataSourceFactory.createDataSource(props);
     }
 
+    @Bean
+    public DataSource frontNewDatasource() throws Exception {
+        Properties props = new Properties();
+        props.put("driverClassName", environment.getProperty("frontnew.datasource.driver-class-name"));
+        props.put("url", environment.getProperty("frontnew.datasource.url"));
+        props.put("username", environment.getProperty("frontnew.datasource.username"));
+        props.put("password", environment.getProperty("frontnew.datasource.password"));
+        return DruidDataSourceFactory.createDataSource(props);
+    }
+
+    @Bean
+    public DataSource ytmatRookieDatasource() throws Exception {
+        Properties props = new Properties();
+        props.put("driverClassName", environment.getProperty("ytmat.datasource.driver-class-name"));
+        props.put("url", environment.getProperty("ytmat.datasource.url"));
+        props.put("username", environment.getProperty("ytmat.datasource.username"));
+        props.put("password", environment.getProperty("ytmat.datasource.password"));
+        return DruidDataSourceFactory.createDataSource(props);
+    }
+
     /**
      * @Primary 该注解表示在同一个接口有多个实现类可以注入的时候，默认选择哪一个，而不是让@autowire注解报错
      * @Qualifier 根据名称进行注入，通常是在具有相同的多个类型的实例的一个注入（例如有多个DataSource类型的实例）
@@ -79,13 +99,16 @@ public class MyBatisConfig implements EnvironmentAware {
     public DynamicDataSource dataSource(@Qualifier("mysqlDatasource")DataSource mysqlDatasource,
                                         @Qualifier("uatstlDatasource")DataSource uatstlDatasource,
                                         @Qualifier("frontdbDatasource")DataSource frontdbDatasource,
-                                        @Qualifier("olduatDatasource")DataSource olduatDatasource) {
+                                        @Qualifier("olduatDatasource")DataSource olduatDatasource,
+                                        @Qualifier("frontNewDatasource")DataSource frontNewDatasource,
+                                        @Qualifier("ytmatRookieDatasource")DataSource ytmatRookieDatasource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DatabaseType.mysql, mysqlDatasource);
         targetDataSources.put(DatabaseType.UATSTL, uatstlDatasource);
         targetDataSources.put(DatabaseType.OLDUAT, olduatDatasource);
-//        targetDataSources.put(DatabaseType.WZBMYSQL, wzbMysqlDataSource);
         targetDataSources.put(DatabaseType.FRONTDB, frontdbDatasource);
+        targetDataSources.put(DatabaseType.FRONTNEW, frontNewDatasource);
+        targetDataSources.put(DatabaseType.ROOKIE, ytmatRookieDatasource);
 
         DynamicDataSource dataSource = new DynamicDataSource();
         dataSource.setTargetDataSources(targetDataSources);// 该方法是AbstractRoutingDataSource的方法

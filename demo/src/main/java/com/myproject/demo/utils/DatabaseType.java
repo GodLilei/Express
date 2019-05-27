@@ -10,6 +10,7 @@ public enum DatabaseType {
     mysql,
     UATSTL,
     OLDUAT,
-    WZBMYSQL,
-    FRONTDB
+    FRONTDB,
+    FRONTNEW,
+    ROOKIE
 }

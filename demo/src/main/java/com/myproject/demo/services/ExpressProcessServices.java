@@ -33,4 +33,24 @@ public class ExpressProcessServices {
     public void delExpPro(String[] array){
         expressProcessDao.delExpPro(array);
     };
+
+    public void insertExpProUat(ExpressProcess expressProcess){
+        expressProcessDao.insertExpProUat(expressProcess);
+    }
+
+    public List<ExpressProcess> queryByWaybillNoUat(String waybillNo){
+        return expressProcessDao.queryByWaybillNoUat(waybillNo);
+    };
+
+    public void updateExpProUat(ExpressProcess expressProcess){
+        expressProcessDao.updateExpProUat(expressProcess);
+    }
+
+    public List<ExpressProcess> expressDetailUat(ExpressProcess expressProcess){
+        return expressProcessDao.expressDetailUat(expressProcess);
+    }
+
+    public void delExpProUat(String[] array){
+        expressProcessDao.delExpProUat(array);
+    };
 }

@@ -29,7 +29,7 @@ public class Base64Utill {
     }
 
     public static void main(String[] rags) throws UnsupportedEncodingException, Exception {
-        String str = "长沙市上海市";
+        String str = "Aa1122";
         String code = Base64Utill.encode(str);
         System.err.println("加密前：" + str);
         System.err.println("加密后：" + code);

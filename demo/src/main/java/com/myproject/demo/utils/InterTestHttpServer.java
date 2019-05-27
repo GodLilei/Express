@@ -35,6 +35,7 @@ public class InterTestHttpServer {
      */
     public String HttpGetofJSONString(String url,String[] key,String[] value) {
 
+        log.info("-------------------分隔符-------------------------");
         log.info("----->Get请求开始：url:" + url);
         try {
             URIBuilder uriBuilder = new URIBuilder(url);
@@ -46,7 +47,7 @@ public class InterTestHttpServer {
             }
             uriBuilder.addParameters(params);
             HttpGet httpGet = new HttpGet(uriBuilder.build());
-
+            httpGet.setHeader("Cookie","TOKEN=MEE1RTQyQjI4NjRCQTMzQUIxQUU4N0UzMEE4NEYzMjhDRTZFNDQwQzRCNUU2MTUyRThCQjU4MjJBQ0U2N0EzMkFEOTYwOTFDNjVENjJFMzZENkQ3OUU5NEMxMDFBQjRDQzhCMDcxMjMwMkQwRUNCMzhBM0JBMEIzMEUzODVFQTZFNDkzREQ3M0FFMkE2MDQ4OTQ4NDk0ODQxQjE3QkMyQQ==");
             response = httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
             // 使用Apache提供的工具类进行转换成字符串
@@ -73,13 +74,14 @@ public class InterTestHttpServer {
 
         httpPost.setConfig(requestConfig);
         httpPost.setHeader("Content-Type","application/json");  //设置格式
+        httpPost.setHeader("Cookie","TOKEN=MzgzNTRBNzZBQUMzMTI1NDE4MUQ4ODg1MTAzNjU1MTNEQTJENjZFQTU2OTYxRDA1MTE0NkRERjg4RDY2NEI2MUQ2OTNERkJFRTMyMUI1ODBFQUQ4NDQxN0IxMDdDNDkzODg2Q0M4NkNGN0E3ODc2MTlGNDdBMjc1RTg1NjAwNEZFNDkzREQ3M0FFMkE2MDQ4OTQ4NDk0ODQxQjE3QkMyQQ==");
 
         //请求开始-------------------------
         log.info("----->Post请求开始，url:" + url);
         try {
             httpPost.setEntity(new StringEntity(jsonParams,ContentType.create("application/json", "utf-8")));//设置参数
-            //System.out.println("request parameters" + EntityUtils.toString(httpPost.getEntity()));//检验参数是否设置成功
-            HttpResponse response = httpClient.execute(httpPost);//请求
+//            System.out.println("request parameters" + EntityUtils.toString(httpPost.getEntity()));//检验参数是否设置成功
+            response = httpClient.execute(httpPost);//请求
 
 //            System.out.println(" code:"+response.getStatusLine().getStatusCode());//返回状态码
 //            System.out.println("doPostForInfobipUnsub response"+response.getStatusLine().toString());//返回状态信息

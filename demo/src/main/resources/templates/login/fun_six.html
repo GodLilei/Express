@@ -17,7 +17,7 @@
 <body class="mybody">
 <div>
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-        <legend style="font-size: 2em">子系统基本操作&nbsp;&nbsp;<span id="user"></span></legend>
+        <legend style="font-size: 2em"><span id="title"></span>&nbsp;&nbsp;<span id="user">default</span></legend>
 
     </fieldset>
 </div>
@@ -127,6 +127,63 @@
             </div>
         </div>
     </div>
+
+    <div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend style="color: red">计泡信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">长</label>
+            <div class="layui-input-inline">
+                <input type="text" name="pkg_length" value="40" id="pkgLength" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">宽</label>
+            <div class="layui-input-inline">
+                <input type="text" name="pkg_width" value="50" id="pkgWidth" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">高</label>
+            <div class="layui-input-inline">
+                <input type="text" name="pkg_height" value="60" id="pkgHeight" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">体积重</label>
+            <div class="layui-input-inline">
+                <input type="text" name="volume_weight" id="volumeWeight" value="24" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">操作网点</label>
+            <div class="layui-input-inline">
+                <input type="text" name="jipao_org_code" value="210901" id="jipaoOrgCode" autocomplete="off"
+                       lay-verify="required"
+                       class="layui-input taking">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">ORGTYPE</label>
+            <div class="layui-input-inline">
+                <select name="jipao_org_type" id="jipaoType" lay-filter="jipaoType">
+                    <option value="">请选择</option>
+                    <option value="BRANCH">BRANCH</option>
+                    <option value="TRANSFER_CENTER" selected>TRANSFER_CENTER</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div>
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend style="color: red">下车信息</legend>
@@ -251,6 +308,8 @@
         <div class="layui-inline">
             <button class="layui-btn layui-btn-danger" id="taking" lay-submit lay-filter="taking">揽收</button>
             <button class="layui-btn layui-btn-danger" id="build" lay-submit lay-filter="build">建包</button>
+            <button class="layui-btn layui-btn-danger" id="unpack" lay-submit lay-filter="unpack">拆包</button>
+            <button class="layui-btn layui-btn-danger" id="bubble" lay-submit lay-filter="bubble">计泡</button>
             <button class="layui-btn layui-btn-danger" id="out" lay-submit lay-filter="out">下车</button>
             <button class="layui-btn layui-btn-danger" id="out_return" lay-submit lay-filter="out_return">退回</button>
             <button class="layui-btn layui-btn-danger" id="handon" lay-submit lay-filter="handon">派件</button>
@@ -267,6 +326,7 @@
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="addExpPro">新增</button>
         <button class="layui-btn layui-btn-sm" lay-event="delData">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="importExcel">导入</button>
         <button class="layui-btn layui-btn-sm" lay-event="exportExcel">导出</button>
     </div>
 </script>
@@ -282,9 +342,16 @@
         let layer = layui.layer;
         let $ = layui.jquery;
 
-        var tab;
+        let tab;
         let reloadFlag;
-        
+
+        let f_flag = window.location.pathname;
+        let ff_flag = f_flag.substr(f_flag.length-3,3);
+
+        $(function () {
+            $('#title').text('子系统基本操作' + ff_flag + '环境');
+        });
+
         $(function () {
             if(($('#user').text()) === ''){
                 layer.prompt({
@@ -296,6 +363,36 @@
                     $('#user').text(value);
                 });
             }
+        });
+
+        $('#title').click(function () {
+            let flag = '';
+            if (ff_flag === 'Sit'){
+                flag = 'Uat'
+            }else {
+                flag = 'Sit'
+            }
+            layer.open({
+                type: 1
+                ,offset: 'auto'
+                ,area: ['400px', '160px']
+                ,btn:['确定','取消']
+                ,content: '<div style="text-align: center;font-size: 1.2em;padding-top: 15px">'
+                + '是否跳转至' + flag + '环境？'
+                + '</div>'
+                ,yes: function(index) {
+                    layer.close(index);
+                    window.location.href = '/mainframe/Express' + flag;
+                }
+            });
+        });
+
+        $('#pkgLength,#pkgHeight,#pkgWidth').blur(function () {
+            let length = $('#pkgLength').val();
+            let height = $('#pkgHeight').val();
+            let width = $('#pkgWidth').val();
+            let volume_weight = length*height*width/5000;
+            $('#volumeWeight').val(volume_weight);
         });
 
         $('#user').click(function () {
@@ -312,7 +409,7 @@
         form.on('submit(taking)',function (data) {
             let taking = JSON.stringify(data.field);
             $.ajax({
-                url:'/taking',
+                url:'/taking' + ff_flag,
                 data:taking,
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -335,7 +432,7 @@
         form.on('submit(build)',function (data) {
             let bulid = JSON.stringify(data.field);
             $.ajax({
-                url:'/build',
+                url:'/build' + ff_flag,
                 data:bulid,
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -354,11 +451,57 @@
             });
             return false;
         });
+        form.on('submit(unpack)',function (data) {
+            let unpack = JSON.stringify(data.field);
+            $.ajax({
+                url:'/unpack' + ff_flag,
+                data:unpack,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    // alert(data);
+                    // let unpackRes = JSON.parse(data);
+                    // if (unpackRes.code === '0') {
+                    //     layer.msg(unpackRes.message);
+                    // }else {
+                    //     layer.alert(unpackRes.message);
+                    // }
+                    // usual("拆包",$('#bulidOrgCode').val());
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
+        form.on('submit(bubble)',function (data) {
+            let bubble = JSON.stringify(data.field);
+            $.ajax({
+                url:'/bubble' + ff_flag,
+                data:bubble,
+                dataType: 'text',
+                contentType:'application/json;charset=UTF-8',
+                type:'post',
+                success:function (data) {
+                    // alert(data);
+                    // let bubbleRes = JSON.parse(data);
+                    // if (bubbleRes.code === '0') {
+                    //     layer.msg(bubbleRes.message);
+                    // }else {
+                    //     layer.alert(bubbleRes.message);
+                    // }
+                    // usual("计泡",$('#jipaoOrgCode').val());
+                },
+                error:function (data) {
+                }
+            });
+            return false;
+        });
 
         form.on('submit(out)',function (data) {
             let out = JSON.stringify(data.field);
             $.ajax({
-                url:'/out',
+                url:'/out' + ff_flag,
                 data:out,
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -381,7 +524,7 @@
         form.on('submit(out_return)',function (data) {
             let out_return = JSON.stringify(data.field);
             $.ajax({
-                url:'/outReturn',
+                url:'/outReturn' + ff_flag,
                 data:out_return,
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -404,7 +547,7 @@
         form.on('submit(handon)',function (data) {
             let handon = JSON.stringify(data.field);
             $.ajax({
-                url:'/handon',
+                url:'/handon' + ff_flag,
                 data:handon,
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -427,7 +570,7 @@
         form.on('submit(signature)',function (data) {
             let signature = JSON.stringify(data.field);
             $.ajax({
-                url:'/signature',
+                url:'/signature' + ff_flag,
                 data:signature,
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -463,9 +606,8 @@
                 ,yes: function(index){
                     layer.close(index);
                     let waybillGet = JSON.stringify(data.field);
-
                     $.ajax({
-                        url:'/waybillGet',
+                        url:'/waybillGet' + ff_flag,
                         data:waybillGet,
                         dataType: 'text',
                         contentType:'application/json;charset=UTF-8',
@@ -477,9 +619,9 @@
                             let wb = $('#waybill');
                             layer.msg('单号生成成功，网点：' + soc);
                             wb.val(JSON.parse(waybill).data[0].wbn);
-                            let xiadan = new XIADAN(cus,soc,seller,wb.val());
+                            let xiadan = new XIADAN(cus,soc,$('#desOrgCode').val(),seller,wb.val());
                             $.ajax({
-                                url:'/xiadan',
+                                url:'/xiadan' + ff_flag,
                                 data:JSON.stringify(xiadan),
                                 dataType: 'text',
                                 contentType:'application/json;charset=UTF-8',
@@ -492,7 +634,7 @@
                                         layer.msg(msg1.msg);
                                         let ep = new EP($('#user').text(),wb.val(),cus,soc);
                                         $.ajax({
-                                            url:'/insertEP',
+                                            url:'/insertEP' + ff_flag,
                                             data:JSON.stringify(ep),
                                             dataType: 'text',
                                             contentType:'application/json;charset=UTF-8',
@@ -506,7 +648,7 @@
                                         layer.msg(msg1.msg);
                                         let ep = new EP($('#user').text(),wb.val(),"",soc);
                                         $.ajax({
-                                            url:'/insertEP',
+                                            url:'/insertEP' + ff_flag,
                                             data:JSON.stringify(ep),
                                             dataType: 'text',
                                             contentType:'application/json;charset=UTF-8',
@@ -541,7 +683,12 @@
             } else {
                 month = month + '';
             }
-            let day = date.getDate()+'';
+            let day = date.getDate();
+            if (day < 10){
+                day = '0'+day;
+            } else {
+                day = day + '';
+            }
             layer.prompt({
                 formType: 3
                 ,title: '请输入查询日期：'
@@ -557,7 +704,7 @@
                 let ep = JSON.stringify(new EP(myUser,"","",""));
                 reloadFlag = ep;
                 $.ajax({
-                    url:'/queryExpress',
+                    url:'/queryExpress' + ff_flag,
                     data:ep,
                     dataType: 'text',
                     contentType:'application/json;charset=UTF-8',
@@ -595,7 +742,7 @@
         table.on('toolbar(ExpressDetail)', function(obj){
             let checkStatus = table.checkStatus('ExpressDetail');
             if (obj.event === 'exportExcel'){
-                console.log(checkStatus);
+
             }else if (obj.event === 'delData'){
                 let array = [];
                 for (let i = 0; i < checkStatus.data.length; i++){
@@ -605,7 +752,7 @@
                 let del = {};
                 del["arrays"] = array;
                 $.ajax({
-                    url:'/delExpPro',
+                    url:'/delExpPro' + ff_flag,
                     data:JSON.stringify(del),
                     dataType: 'text',
                     contentType:'application/json;charset=UTF-8',
@@ -629,10 +776,24 @@
                     ,area: ['1000px', '670px']
                     ,skin: 'demo-class'
                     ,offset: '10px'
-                    ,maxmin: false
+                    ,maxmin: true
                     ,anim: 1
                     ,resize:false
-                    ,content:'/addExpProDemo'
+                    ,content:'/addExpProDemo' + ff_flag
+                    ,shade:0
+                });
+            }else if (obj.event === 'importExcel'){
+                layer.open({
+                    type:2
+                    ,title:'导入走件流程'
+                    ,area: ['1000px', '670px']
+                    ,skin: 'demo-class'
+                    ,offset: '10px'
+                    ,maxmin: true
+                    ,anim: 1
+                    ,resize:false
+                    ,content: '/expImport' + ff_flag
+                    ,shade:0
                 });
             }
 
@@ -688,7 +849,7 @@
             let user = $('#user').text();
             let op = new OP(waybill_no,"|" + opp + oc,user);
             $.ajax({
-                url:'/insertEP',
+                url:'/insertEP' + ff_flag,
                 data:JSON.stringify(op),
                 dataType: 'text',
                 contentType:'application/json;charset=UTF-8',
@@ -697,7 +858,7 @@
         }
         function reloadTable() {
             $.ajax({
-                url: '/queryExpress',
+                url: '/queryExpress' + ff_flag,
                 data: reloadFlag,
                 dataType: 'text',
                 contentType: 'application/json;charset=UTF-8',
@@ -710,8 +871,9 @@
                 }
             });
         }
-        function XIADAN(emp_code,source_org_code,seller,waybill_no) {
+        function XIADAN(emp_code,source_org_code,des_org_code,seller,waybill_no) {
             this.emp_code = emp_code;
+            this.des_org_code = des_org_code;
             this.source_org_code = source_org_code;
             this.seller = seller;
             this.waybill_no = waybill_no;

@@ -14,7 +14,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.hssf.usermodel.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
@@ -60,8 +62,13 @@ public class Encoder {
 	
 	public static void main(String args []) throws Exception {
 
-		String a = "揽收210077[]";
-		System.out.println(a.length());
+		for (int i=0;i<10;i++){
+			Thread.sleep(1000);
+			System.out.println(i);
+		}
+
+//		String a = "揽收210077[]";
+//		System.out.println(a.length());
 
 
 //	    String data = "1488507815505'0001','0002'5";
@@ -116,8 +123,7 @@ public class Encoder {
 //		}
 //		System.out.println(vi + " " + vj + " " + vi/vj + " " + temp);
 
-
-//        System.out.println(weChatSend("K21002107","210077","856985474525156775","2575775285"));
+//        System.out.println(weChatSend("K21002107","210077","812321236547611321","2575775285"));
 	}
 
 
@@ -183,4 +189,5 @@ public class Encoder {
 //
 //        return entityStr;
 //    }
+
 }

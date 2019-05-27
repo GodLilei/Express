@@ -54,7 +54,7 @@ public class Express {
     private String out_org_code;//下车组织机构
     private String taking_org_code;//揽收组织机构
     private String return_org_code;//退回操作网点
-
+    private String jipao_org_code;//计泡操作网点
 
     /***/
     private String seller = "2575775285";//商家
@@ -84,13 +84,20 @@ public class Express {
     /**
      * 重量
      */
+    private Double weigh_weight = 0.00;
     private Double input_weight;//重量
     private Double out_weight;//下车重量
+    private Double volume_weight = 0.00;//体积重
+    private Double pkg_length = 0.00;//长
+    private Double pkg_width = 0.00;//宽
+    private Double pkg_height = 0.00;//高
+    private Double fee_weight = 0.00;
 
     private String modify_terminal = "74-27-EA-15-DE-CA";//
 
     private String build_org_type;//建包组织类型：BRANCH,TRANSFER_CENTER
     private String out_org_type;//下车组织类型：BRANCH,TRANSFER_CENTER
+    private String jipao_org_type;//计泡下车类型
 
     private Char data_status;
 

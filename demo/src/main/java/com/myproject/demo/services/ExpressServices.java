@@ -5,6 +5,7 @@ import com.myproject.demo.entity.Express;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ExpressServices {
@@ -31,5 +32,8 @@ public class ExpressServices {
     }
     public void signature(Express express){
         expressOpDao.signature(express);
+    }
+    public Integer checkHandon(String waybill){
+        return expressOpDao.checkHandon(waybill);
     }
 }

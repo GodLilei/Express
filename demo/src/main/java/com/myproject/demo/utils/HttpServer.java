@@ -43,11 +43,71 @@ public class HttpServer {
 
     CloseableHttpResponse response = null;
 
-    public String weChatSend(String CustomerCode, String SendOrgCode, String WaybillNo,String seller){
+    public String weChatSend(String CustomerCode, String SendOrgCode, String WaybillNo,String seller, String
+            desOrgCode){
 
         log.info("----->执行下单接口：");
         try {
-            URIBuilder uriBuilder = new URIBuilder("http://jingang.msns.cn/ytts/CreateOrderS");
+            URIBuilder uriBuilder = new URIBuilder("http://jingang.msns.cn/yttssit/CreateOrderS");
+            List<NameValuePair> params = new LinkedList<>();
+            params.add(new BasicNameValuePair("ChannelCode","TAOBAO"));
+            params.add(new BasicNameValuePair("ChannelKey","jNpKcyXrHfNJ"));
+            params.add(new BasicNameValuePair("SellerCode",seller));
+            params.add(new BasicNameValuePair("NetworkType","A"));
+            params.add(new BasicNameValuePair("OrderType","online"));
+            params.add(new BasicNameValuePair("IsAli","N"));
+            params.add(new BasicNameValuePair("CustomerCode",CustomerCode));
+            params.add(new BasicNameValuePair("ServiceType","0"));
+            params.add(new BasicNameValuePair("IdCard","342401199412064079"));
+            params.add(new BasicNameValuePair("SendName","%E5%BC%A0%E4%B8%89"));
+            params.add(new BasicNameValuePair("SendOrgCode",SendOrgCode));
+            params.add(new BasicNameValuePair("SendPhoneNo","15921108467"));
+            params.add(new BasicNameValuePair("ReceiveName","%E6%9D%8E%E5%9B%9B"));
+            params.add(new BasicNameValuePair("ReceiveOrgCode",desOrgCode));
+            params.add(new BasicNameValuePair("ReceivePhoneNo","15921108453"));
+            params.add(new BasicNameValuePair("AddService","1"));
+            params.add(new BasicNameValuePair("OrdPrefix","TB"));
+            params.add(new BasicNameValuePair("WaybillNo",WaybillNo));
+            params.add(new BasicNameValuePair("Cod","0"));
+            params.add(new BasicNameValuePair("Pay","0"));
+            params.add(new BasicNameValuePair("Keep","0"));
+            uriBuilder.addParameters(params);
+            HttpGet httpGet = new HttpGet(uriBuilder.build());
+            response = httpClient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            // 使用Apache提供的工具类进行转换成字符串
+            entityStr = EntityUtils.toString(entity, "UTF-8");
+            log.info("----->下单接口访问成功，返回值：" + entityStr);
+        } catch (URISyntaxException e) {
+            System.out.println("Url解析出错");
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            System.out.println("http协议出错");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("IO异常");
+            e.printStackTrace();
+        }finally {
+            if (null!=response){
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    System.out.println("释放链接出错");
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return entityStr;
+    }
+
+
+    public String weChatSendUat(String CustomerCode, String SendOrgCode, String WaybillNo,String seller, String
+            desOrgCode){
+
+        log.info("----->UAT执行下单接口：");
+        try {
+            URIBuilder uriBuilder = new URIBuilder("http://jingang.msns.cn/yttsuat/CreateOrderS");
             List<NameValuePair> params = new LinkedList<>();
             params.add(new BasicNameValuePair("ChannelCode","TAOBAO"));
             params.add(new BasicNameValuePair("ChannelKey","jNpKcyXrHfNJ"));
@@ -62,7 +122,7 @@ public class HttpServer {
             params.add(new BasicNameValuePair("SendOrgCode",SendOrgCode));
             params.add(new BasicNameValuePair("SendPhoneNo","15921108467"));
             params.add(new BasicNameValuePair("ReceiveName","李四"));
-            params.add(new BasicNameValuePair("ReceiveOrgCode","210045"));
+            params.add(new BasicNameValuePair("ReceiveOrgCode",desOrgCode));
             params.add(new BasicNameValuePair("ReceivePhoneNo","15921108453"));
             params.add(new BasicNameValuePair("AddService","1"));
             params.add(new BasicNameValuePair("OrdPrefix","TB"));

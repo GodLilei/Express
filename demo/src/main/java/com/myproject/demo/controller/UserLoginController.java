@@ -5,6 +5,7 @@ import com.myproject.demo.entity.Site;
 import com.myproject.demo.entity.UserLogin;
 import com.myproject.demo.entity.Warning_Index;
 import com.myproject.demo.services.UserLoginServices;
+import com.myproject.demo.utils.Tool;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,7 +45,29 @@ public class UserLoginController {
         return "/login/userlogin";
     }
 
-    @RequestMapping(value = "/mainframe/Express",method = {RequestMethod.GET,RequestMethod.POST})
+//    @ResponseBody
+//    @RequestMapping(value = "/testExpSit")
+//    public String testExp(HttpServletResponse response,HttpServletRequest request){
+//        String a = response.getHeader("Cookie");
+//        Cookie cookie = new Cookie("test","test");
+//        cookie.setPath("/");
+//        cookie.setDomain("http://172.16.51.37:8080/testExpSit");
+//        cookie.setMaxAge(99999);
+//        Cookie[] cookies = request.getCookies();
+//        if (null != cookies) {
+//            for (Cookie cookiess : cookies) {
+//                System.out.println(cookiess);
+//            }
+//        }
+//      return "a";
+//    }
+
+    @RequestMapping(value = "/mainframe/ExpressSit",method = {RequestMethod.GET,RequestMethod.POST})
+    public String loginSit(){
+        return "/login/fun_six";
+    }
+
+    @RequestMapping(value = "/mainframe/ExpressUat",method = {RequestMethod.GET,RequestMethod.POST})
     public String loginUat(){
         return "/login/fun_six";
     }
